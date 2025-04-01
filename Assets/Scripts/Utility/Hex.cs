@@ -27,6 +27,8 @@ public struct Hex
     public readonly int Q => q;
     public readonly int R => r;
     public readonly int S => s;
+
+    public static readonly Hex None = new (1000, 1000);
     
     public Hex(int q, int r, int s)
     {
@@ -142,12 +144,12 @@ public struct Hex
     private const float RADIUS = 1f;
     
     public static Hex[] directions = {
-        new Hex(0, 1, -1), // North
-        new Hex(1, 0, -1), // North-East
-        new Hex(1, -1, 0), // South-East
-        new Hex(0, -1, 1), // South
-        new Hex(-1, 0, 1), // South-West
-        new Hex(-1, 1, 0) // North-West
+        new(0, 1, -1), // North
+        new(1, 0, -1), // North-East
+        new(1, -1, 0), // South-East
+        new(0, -1, 1), // South
+        new(-1, 0, 1), // South-West
+        new(-1, 1, 0) // North-West
     };
     
     public static Hex Direction(HexDirection direction)
@@ -162,17 +164,17 @@ public struct Hex
 
     public static Hex[] diagonals = 
     {
-        new Hex(1, 1, -2), // North-East
-        new Hex(2, -1, -1), // East
-        new Hex(1, -2, 1), // South-East
-        new Hex(-1, -1, 2), // South-West
-        new Hex(-2, 1, 1), // West
-        new Hex(-1, 2, -1) // North-West
+        new(1, 1, -2), // North-East
+        new(2, -1, -1), // East
+        new(1, -2, 1), // South-East
+        new(-1, -1, 2), // South-West
+        new(-2, 1, 1), // West
+        new(-1, 2, -1) // North-West
     };
 
     public static List<Hex> GetHexMap(int radius)
     {
-        List<Hex> hexMap = new List<Hex>();
+        List<Hex> hexMap = new();
         for (int q = -radius; q <= radius; q++)
         {
             int r1 = Math.Max(-radius, -q - radius);
@@ -185,6 +187,14 @@ public struct Hex
 
         return hexMap;
     }
+
+    public static Hex GetHexFromPixel(Vector2 pixel)
+    {
+        float q = (pixel.x * SQRT3 / 3 - pixel.y / 3) / RADIUS;
+        float r = pixel.y * 2f / 3 / RADIUS;
+        return new Hex(Mathf.RoundToInt(q), Mathf.RoundToInt(r));
+    }
+
     #endregion
 }
 

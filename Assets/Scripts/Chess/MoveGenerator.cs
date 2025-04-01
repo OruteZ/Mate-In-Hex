@@ -34,7 +34,7 @@ namespace Chess
             {
                 Hex nextPos = piece.position.Add(Hex.Direction(direction));
                 
-                if (board.IsTileEmpty(nextPos))
+                if (board.IsTileAvailable(nextPos))
                 {
                     moves.Add(new Move
                     {
@@ -63,7 +63,7 @@ namespace Chess
             {
                 Hex nextPos = piece.position.Add(Hex.diagonals[(int)direction]);
                 
-                if (board.IsTileEmpty(nextPos))
+                if (board.IsTileAvailable(nextPos))
                 {
                     moves.Add(new Move
                     {
@@ -111,7 +111,7 @@ namespace Chess
             {
                 Hex nextPos = curPos.Add(direction);
                 
-                if (board.IsTileEmpty(nextPos))
+                if (board.IsTileAvailable(nextPos))
                 {
                     bishopMoves.Add(new Move
                     {
@@ -170,7 +170,7 @@ namespace Chess
                 Hex nextPos = piece.position.Add(targetDirection);
                 
                 // Check if the target position is valid
-                if (board.IsTileEmpty(nextPos))
+                if (board.IsTileAvailable(nextPos))
                 {
                     moves.Add(new Move
                     {
@@ -222,7 +222,7 @@ namespace Chess
             }
 
             // Check if the forward move is valid
-            if (board.IsTileEmpty(forwardMove))
+            if (board.IsTileAvailable(forwardMove))
             {
                 moves.Add(new Move
                 {
@@ -267,7 +267,7 @@ namespace Chess
                 Hex nextPos = curPos.Add(direction);
                 
                 // check if the next position is valid
-                if (board.IsTileEmpty(nextPos))
+                if (board.IsTileAvailable(nextPos))
                 {
                     rookMoves.Add(new Move
                     {

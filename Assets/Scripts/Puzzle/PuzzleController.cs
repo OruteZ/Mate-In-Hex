@@ -14,6 +14,8 @@ namespace Puzzle
         [Header("About Moves")]
         [SerializeField] private MoveGenerator moveGenerator;
         [SerializeField] private MovableView movableView;
+        [SerializeField] private ControlState controlState = ControlState.None;
+        [SerializeField] private List<Move> curMovable = new ();
         
         private void Start()
         {
@@ -33,21 +35,41 @@ namespace Puzzle
 
         private void Update() {
             // check if mouse is clicked
-            if (Input.GetMouseButtonDown(0))
+            switch(controlState)
             {
-                Piece clickedPiece = GetClickedPiece();
-                if (clickedPiece != null)
-                {
-                    OnClickPiece(clickedPiece);
-                }
-                else {
-                    Debug.Log("Clicked on empty tile"); 
-                }
-            }
+                case ControlState.None:
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        Piece clickedPiece = GetClickedPiece();
+                        if (clickedPiece != null)
+                        {
+                            SelectPiece(clickedPiece);
+                            controlState = ControlState.SelectPiece;
+                        }
+                    }
+                    break;
 
-            if (Input.GetMouseButtonDown(1))
-            {
-                movableView.HideMovable();
+                case ControlState.SelectPiece:
+                    if(Input.GetMouseButtonDown(1)) 
+                    {
+                        // cancel selection
+                        movableView.HideMovable();
+                        controlState = ControlState.None;
+                    }
+
+                    if (Input.GetMouseButtonDown(0)) 
+                    {
+                        Hex clickedPos = GetClickedHex();
+                        if (clickedPos != Hex.None) 
+                        {
+                            // check if the clicked tile is in the movable range
+
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
             }
         }
         
@@ -60,30 +82,53 @@ namespace Puzzle
         public Piece GetClickedPiece()
         {
             // Raycast to get the clicked piece : has Layer "ChessPiece"
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             LayerMask layerMask = LayerMask.GetMask("ChessPiece");
-
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
+            Vector2 origin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.zero, Mathf.Infinity, layerMask);
+            if (hit.collider != null)
             {
-                // check if the clicked object has a PieceView component
-                if (hit.transform.TryGetComponent<PieceView>(out var pieceView))
+                if (hit.collider.TryGetComponent<PieceView>(out var pieceView))
                 {
                     return pieceView.piece;
                 }
+                else Debug.LogError("Hit collider does not have PieceView component.");
             }
 
             return null;
         }
+
+        public Hex GetClickedHex()
+        {
+            // Raycast to get the clicked tile using 2D physics : has Layer "Tile"
+            LayerMask layerMask = LayerMask.GetMask("Tile");
+            Vector2 origin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.zero, Mathf.Infinity, layerMask);
+
+            if (hit.collider != null)
+            {
+                Vector2 position = hit.point;
+                Hex result = Hex.GetHexFromPixel(position);
+                return result;
+            }
+
+            return Hex.None; // return a dummy value
+        }
     
-        public void OnClickPiece(Piece p) 
+        public void SelectPiece(Piece p) 
         {
             // test : show movable range
             Debug.Log($"Clicked on {p.color} {p.type} at {p.position}");
 
             // show movable tiles
-            List<Move> movableTiles = moveGenerator.GetAvailableMoves(board, p);
-
-            movableView.ShowMovable(movableTiles.ConvertAll(move => move.to));
+            curMovable = moveGenerator.GetAvailableMoves(board, p);
+            movableView.ShowMovable(curMovable.ConvertAll(move => move.to));
         }
+    }
+
+    [System.Serializable]
+    enum ControlState
+    {
+        None,
+        SelectPiece,
     }
 }

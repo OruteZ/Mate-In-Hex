@@ -72,7 +72,20 @@ namespace Chess
             }
         }
 
-        public bool IsTileEmpty(Hex position)
+        public Piece GetPieceAt(Hex position)
+        {
+            foreach (Piece piece in pieces)
+            {
+                if (piece.position == position)
+                {
+                    return piece;
+                }
+            }
+
+            return null;
+        }
+
+        public bool IsTileAvailable(Hex position)
         {   
             foreach (Piece piece in pieces)
             {

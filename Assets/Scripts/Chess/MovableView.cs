@@ -5,13 +5,14 @@ using UnityEngine;
 public class MovableView : MonoBehaviour
 {
     [SerializeField] private GameObject movableUIPrefab;
-
-    [SerializeField] private bool isOn = false;
     [SerializeField] private List<GameObject> movableUIList = new List<GameObject>();
 
     public void ShowMovable(List<Hex> hexList)
     {
-        if(isOn) return;
+        if(movableUIList.Count > 0)
+        {
+            HideMovable();
+        }
 
         foreach (Hex hex in hexList)
         {
@@ -26,8 +27,6 @@ public class MovableView : MonoBehaviour
 
             movableUIList.Add(movableUI);
         }
-
-        isOn = true;
     }
 
     public void HideMovable()
@@ -37,7 +36,5 @@ public class MovableView : MonoBehaviour
             Destroy(child.gameObject);
         }
         movableUIList.Clear();
-
-        isOn = false;
     }
 }

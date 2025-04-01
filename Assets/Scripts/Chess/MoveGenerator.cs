@@ -23,16 +23,95 @@ namespace Chess
                     moves = GetKnightMoves(board, piece).ToList();
                     break;
                 case PieceType.Bishop:
+                    moves = GetBishopMoves(board, piece).ToList();
                     break;
                 case PieceType.Queen:
+                    moves = GetQueenMoves(board, piece).ToList();
                     break;
                 case PieceType.King:
+                    moves = GetKingMoves(board, piece).ToList();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
             return moves;
+        }
+
+        private IEnumerable<Move> GetKingMoves(Board board, Piece piece) {
+            List<Move> moves = new List<Move>();
+            
+            // get all 6 directions
+            foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
+            {
+                Hex nextPos = piece.position.Add(Hex.Direction(direction));
+                
+                if (board.IsTileEmpty(nextPos) || board.IsTileOccupiedByOpponent(nextPos, piece.color))
+                {
+                    moves.Add(new Move
+                    {
+                        color = piece.color,
+                        pieceType = piece.type,
+                        from = piece.position,
+                        to = nextPos
+                    });
+                }
+            }
+
+            return moves;
+        }
+
+        private IEnumerable<Move> GetQueenMoves(Board board, Piece piece) {
+            List<Move> moves = new List<Move>();
+            
+            // get rook moves
+            moves.AddRange(GetRookMoves(board, piece));
+            
+            // get bishop moves
+            moves.AddRange(GetBishopMoves(board, piece));
+            
+            return moves;
+        }
+
+        private IEnumerable<Move> GetBishopMoves(Board board, Piece piece)
+        {
+            List<Move> bishopMoves = new List<Move>();
+
+            void RecursiveMove(Hex curPos, Hex direction)
+            {
+            Hex nextPos = curPos.Add(direction);
+            
+            if (board.IsTileEmpty(nextPos))
+            {
+                bishopMoves.Add(new Move
+                {
+                color = piece.color,
+                pieceType = piece.type,
+                from = curPos,
+                to = nextPos
+                });
+                
+                RecursiveMove(nextPos, direction);
+            }
+            else if (board.IsTileOccupiedByOpponent(nextPos, piece.color))
+            {
+                bishopMoves.Add(new Move
+                {
+                color = piece.color,
+                pieceType = piece.type,
+                from = curPos,
+                to = nextPos
+                });
+            }
+            }
+            
+            // Use only the diagonal directions from Hex.diagonals
+            foreach (Hex diagonal in Hex.diagonals)
+            {
+                RecursiveMove(piece.position, diagonal);
+            }
+            
+            return bishopMoves;
         }
 
         private IEnumerable<Move> GetKnightMoves(Board board, Piece piece)

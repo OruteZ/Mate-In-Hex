@@ -96,6 +96,7 @@ public struct Hex
 
         return v % 3;
     }
+    #region Operator
     
     // overide != and ==
     public static bool operator ==(Hex a, Hex b)
@@ -107,6 +108,33 @@ public struct Hex
     {
         return !(a == b);
     }
+
+    public static Hex operator +(Hex a, Hex b)
+    {
+        return a.Add(b);
+    }
+
+    public static Hex operator -(Hex a, Hex b)
+    {
+        return a.Subtract(b);
+    }
+
+    public static Hex operator *(Hex a, int k)
+    {
+        return a.Scale(k);
+    }
+    
+    public static Hex operator *(int k, Hex a)
+    {
+        return a.Scale(k);
+    }
+
+    public static Hex operator -(Hex a)
+    {
+        return new Hex(-a.q, -a.r, -a.s);
+    }
+
+    #endregion
 
     public override string ToString()
     {
@@ -139,8 +167,12 @@ public struct Hex
 
     public static Hex[] diagonals = 
     {
-        new Hex(2, -1, -1), new Hex(1, -2, 1), new Hex(-1, -1, 2),
-        new Hex(-2, 1, 1), new Hex(-1, 2, -1), new Hex(1, 1, -2)
+        new Hex(1, 1, -2), // North-East
+        new Hex(2, -1, -1), // East
+        new Hex(1, -2, 1), // South-East
+        new Hex(-1, -1, 2), // South-West
+        new Hex(-2, 1, 1), // West
+        new Hex(-1, 2, -1) // North-West
     };
 
     public static List<Hex> GetHexMap(int radius)

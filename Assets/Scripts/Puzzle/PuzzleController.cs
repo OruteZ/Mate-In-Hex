@@ -48,6 +48,11 @@ namespace Puzzle
                     Debug.Log("Clicked on empty tile"); 
                 }
             }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                movableView.HideMovable();
+            }
         }
         
         

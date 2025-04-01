@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
+[Serializable] 
 public struct Hex
 {
-    public bool Equals(Hex other)
+    public readonly bool Equals(Hex other)
     {
         return q == other.q && r == other.r && s == other.s;
     }
@@ -15,7 +15,7 @@ public struct Hex
         return obj is Hex other && Equals(other);
     }
 
-    public override int GetHashCode()
+    public override readonly int GetHashCode()
     {
         return HashCode.Combine(q, r, s);
     }
@@ -24,9 +24,9 @@ public struct Hex
     [SerializeField] private int r;
     [SerializeField] private int s;
     
-    public int Q => q;
-    public int R => r;
-    public int S => s;
+    public readonly int Q => q;
+    public readonly int R => r;
+    public readonly int S => s;
     
     public Hex(int q, int r, int s)
     {
@@ -38,19 +38,19 @@ public struct Hex
     
     public Hex(int q, int r) : this(q, r, -q - r) { }
     
-    public Hex Add(Hex b)
+    public readonly Hex Add(Hex b)
     {
         return new Hex(q + b.q, r + b.r, s + b.s);
     }
 
 
-    public Hex Subtract(Hex b)
+    public readonly Hex Subtract(Hex b)
     {
         return new Hex(q - b.q, r - b.r, s - b.s);
     }
 
 
-    public Hex Scale(int k)
+    public readonly Hex Scale(int k)
     {
         return new Hex(q * k, r * k, s * k);
     }
@@ -61,7 +61,7 @@ public struct Hex
     }
 
 
-    public int Length()
+    public readonly int Length()
     {
         return (int)((Math.Abs(q) + Math.Abs(r) + Math.Abs(s)) / 2);
     }
@@ -72,19 +72,14 @@ public struct Hex
         return Subtract(b).Length();
     }
     
-    public Vector2 ToPixel()
+    public readonly Vector2 ToPixel()
     {
-        //function flat_hex_to_pixel(hex):
-        // var x = size * (     3./2 * hex.q                    )
-        // var y = size * (sqrt(3)/2 * hex.q  +  sqrt(3) * hex.r)
-        // return Point(x, y)
-
         float x = RADIUS * (1.5f * q);
         float y = RADIUS * (SQRT3 / 2.0f * q + SQRT3 * r);
         return new Vector2(x, y);
     }
 
-    public int GetTileKind()
+    public readonly int GetTileKind()
     {
         int v = q + (r * 2);
         
@@ -136,7 +131,7 @@ public struct Hex
 
     #endregion
 
-    public override string ToString()
+    public override readonly string ToString()
     {
         return $"({q}, {r}, {s})";
     }

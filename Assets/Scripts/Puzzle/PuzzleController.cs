@@ -8,15 +8,11 @@ namespace Puzzle
     {
         public PuzzleInfo puzzleInfo;
         
-        [SerializeField]
-        private BoardView boardView;
-        
-        [SerializeField]
-        private Board board;
+        [SerializeField] private BoardView boardView;
+        [SerializeField] private Board board;
 
         [Header("About Moves")]
-        [SerializeField]
-        private MoveGenerator moveGenerator;
+        [SerializeField] private MoveGenerator moveGenerator;
         [SerializeField] private MovableView movableView;
         
         private void Start()
@@ -55,7 +51,6 @@ namespace Puzzle
             }
         }
         
-        
         [ContextMenu("Refresh Board View")]
         public void RefreshBoardView()
         {
@@ -65,16 +60,13 @@ namespace Puzzle
         public Piece GetClickedPiece()
         {
             // Raycast to get the clicked piece : has Layer "ChessPiece"
-        
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
             LayerMask layerMask = LayerMask.GetMask("ChessPiece");
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
             {
                 // check if the clicked object has a PieceView component
-                PieceView pieceView = hit.transform.GetComponent<PieceView>();
-                if (pieceView != null)
+                if (hit.transform.TryGetComponent<PieceView>(out var pieceView))
                 {
                     return pieceView.piece;
                 }
@@ -83,14 +75,15 @@ namespace Puzzle
             return null;
         }
     
-        public void OnClickPiece(Piece p) {
+        public void OnClickPiece(Piece p) 
+        {
             // test : show movable range
             Debug.Log($"Clicked on {p.color} {p.type} at {p.position}");
 
             // show movable tiles
-            List<Move> movaleableTiles = moveGenerator.GetAvailableMoves(board, p);
+            List<Move> movableTiles = moveGenerator.GetAvailableMoves(board, p);
 
-            movableView.ShowMovable(movaleableTiles.ConvertAll(move => move.to));
+            movableView.ShowMovable(movableTiles.ConvertAll(move => move.to));
         }
     }
 }

@@ -9,44 +9,32 @@ namespace Chess
     {
         public List<Move> GetAvailableMoves(Board board, Piece piece)
         {
-            List<Move> moves = new List<Move>();
+            List<Move> moves = new();
 
-            switch (piece.type)
+            moves = piece.type switch
             {
-                case PieceType.Pawn:
-                    moves = GetPawnMoves(board, piece).ToList();
-                    break;
-                case PieceType.Rook:
-                    moves = GetRookMoves(board, piece).ToList();
-                    break;
-                case PieceType.Knight:
-                    moves = GetKnightMoves(board, piece).ToList();
-                    break;
-                case PieceType.Bishop:
-                    moves = GetBishopMoves(board, piece).ToList();
-                    break;
-                case PieceType.Queen:
-                    moves = GetQueenMoves(board, piece).ToList();
-                    break;
-                case PieceType.King:
-                    moves = GetKingMoves(board, piece).ToList();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                PieceType.Pawn => GetPawnMoves(board, piece).ToList(),
+                PieceType.Rook => GetRookMoves(board, piece).ToList(),
+                PieceType.Knight => GetKnightMoves(board, piece).ToList(),
+                PieceType.Bishop => GetBishopMoves(board, piece).ToList(),
+                PieceType.Queen => GetQueenMoves(board, piece).ToList(),
+                PieceType.King => GetKingMoves(board, piece).ToList(),
+                _ => throw new ArgumentOutOfRangeException("Invalid piece type : " + piece.type),
+            };
 
+            
             return moves;
         }
 
         private IEnumerable<Move> GetKingMoves(Board board, Piece piece) {
-            List<Move> moves = new List<Move>();
+            List<Move> moves = new();
             
             // get all 6 directions
             foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
             {
                 Hex nextPos = piece.position.Add(Hex.Direction(direction));
                 
-                if (board.IsTileEmpty(nextPos) || board.IsTileOccupiedByOpponent(nextPos, piece.color))
+                if (board.IsTileEmpty(nextPos))
                 {
                     moves.Add(new Move
                     {
@@ -56,13 +44,55 @@ namespace Chess
                         to = nextPos
                     });
                 }
+
+                if(board.IsTileOccupiedByOpponent(nextPos, piece.color))
+                {
+                    var captureMove = new Move
+                    {
+                        color = piece.color,
+                        pieceType = piece.type,
+                        from = piece.position,
+                        to = nextPos,
+                        flags = MoveFlag.Capture
+                    };
+                }
             }
 
+            //...and all 6 diagonal directions
+            foreach (HexDiagonalDirection direction in Enum.GetValues(typeof(HexDiagonalDirection)))
+            {
+                Hex nextPos = piece.position.Add(Hex.diagonals[(int)direction]);
+                
+                if (board.IsTileEmpty(nextPos))
+                {
+                    moves.Add(new Move
+                    {
+                        color = piece.color,
+                        pieceType = piece.type,
+                        from = piece.position,
+                        to = nextPos
+                    });
+                }
+
+                if(board.IsTileOccupiedByOpponent(nextPos, piece.color))
+                {
+                    var captureMove = new Move
+                    {
+                        color = piece.color,
+                        pieceType = piece.type,
+                        from = piece.position,
+                        to = nextPos,
+                        flags = MoveFlag.Capture
+                    };
+                }
+            }
+
+            // todo : check for castling
             return moves;
         }
 
         private IEnumerable<Move> GetQueenMoves(Board board, Piece piece) {
-            List<Move> moves = new List<Move>();
+            List<Move> moves = new();
             
             // get rook moves
             moves.AddRange(GetRookMoves(board, piece));
@@ -75,34 +105,35 @@ namespace Chess
 
         private IEnumerable<Move> GetBishopMoves(Board board, Piece piece)
         {
-            List<Move> bishopMoves = new List<Move>();
+            List<Move> bishopMoves = new();
 
             void RecursiveMove(Hex curPos, Hex direction)
             {
-            Hex nextPos = curPos.Add(direction);
-            
-            if (board.IsTileEmpty(nextPos))
-            {
-                bishopMoves.Add(new Move
-                {
-                color = piece.color,
-                pieceType = piece.type,
-                from = curPos,
-                to = nextPos
-                });
+                Hex nextPos = curPos.Add(direction);
                 
-                RecursiveMove(nextPos, direction);
-            }
-            else if (board.IsTileOccupiedByOpponent(nextPos, piece.color))
-            {
-                bishopMoves.Add(new Move
+                if (board.IsTileEmpty(nextPos))
                 {
-                color = piece.color,
-                pieceType = piece.type,
-                from = curPos,
-                to = nextPos
-                });
-            }
+                    bishopMoves.Add(new Move
+                    {
+                        color = piece.color,
+                        pieceType = piece.type,
+                        from = curPos,
+                        to = nextPos
+                    });
+                    
+                    RecursiveMove(nextPos, direction);
+                }
+                else if (board.IsTileOccupiedByOpponent(nextPos, piece.color))
+                {
+                    bishopMoves.Add(new Move
+                    {
+                        color = piece.color,
+                        pieceType = piece.type,
+                        from = curPos,
+                        to = nextPos,
+                        flags = MoveFlag.Capture
+                    });
+                }
             }
             
             // Use only the diagonal directions from Hex.diagonals
@@ -116,15 +147,58 @@ namespace Chess
 
         private IEnumerable<Move> GetKnightMoves(Board board, Piece piece)
         {
-            List<Move> moves = new List<Move>();
-            
+            List<Move> moves = new();
+            List<Hex> targetDirections = new()
+            {
+                new Hex(1, 2, -3),
+                new Hex(2, 1, -3),
+                new Hex(3, -1, -2),
+                new Hex(3, -2, -1),
+                new Hex(2, -3, 1),
+                new Hex(1, -3, 2),
+                new Hex(-1, -2, 3),
+                new Hex(-2, -1, 3),
+                new Hex(-3, 1, 2),
+                new Hex(-3, 2, 1),
+                new Hex(-2, 3, -1),
+                new Hex(-1, 3, -2)
+            };
 
+            // Loop through all target directions
+            foreach (Hex targetDirection in targetDirections)
+            {
+                Hex nextPos = piece.position.Add(targetDirection);
+                
+                // Check if the target position is valid
+                if (board.IsTileEmpty(nextPos))
+                {
+                    moves.Add(new Move
+                    {
+                        color = piece.color,
+                        pieceType = piece.type,
+                        from = piece.position,
+                        to = nextPos
+                    });
+                }
+                else if (board.IsTileOccupiedByOpponent(nextPos, piece.color))
+                {
+                    moves.Add(new Move
+                    {
+                        color = piece.color,
+                        pieceType = piece.type,
+                        from = piece.position,
+                        to = nextPos,
+                        flags = MoveFlag.Capture
+                    });
+                }
+            }
+            
             return moves;
         }
 
         private IEnumerable<Move> GetPawnMoves(Board board, Piece piece)
         {
-            List<Move> moves = new List<Move>();
+            List<Move> moves = new();
             Hex startPos = piece.position;
 
             Hex direction, forwardMove, captureLeftMove, captureRightMove;

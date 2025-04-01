@@ -37,9 +37,11 @@ namespace Chess
             // instantiate tiles
             foreach (Hex tile in board.Tiles)
             {
+                Vector3 tilePosition = tile.ToPixel();
+                tilePosition.z = 1; // avoid z-fighting with pieces
                 GameObject tileGo = Instantiate(
                     tilePrefab, 
-                    tile.ToPixel(),
+                    tilePosition, 
                     Quaternion.identity
                 );
                 tileGo.name = $"Tile_{tile.Q}_{tile.R}";

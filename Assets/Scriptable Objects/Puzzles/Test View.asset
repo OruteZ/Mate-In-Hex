@@ -197,14 +197,20 @@ MonoBehaviour:
     r: 0
     s: -4
   pieces:
-  - color: 0
+  - color: 1
     type: 5
     position:
       q: 0
       r: 0
       s: 0
-  - color: 1
-    type: 5
+  - color: 0
+    type: 0
+    position:
+      q: 1
+      r: 0
+      s: -1
+  - color: 0
+    type: 1
     position:
       q: 1
       r: 0

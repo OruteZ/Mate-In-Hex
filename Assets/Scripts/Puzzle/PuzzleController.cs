@@ -1,4 +1,5 @@
-﻿using Chess;
+﻿using System.Collections.Generic;
+using Chess;
 using UnityEngine;
 
 namespace Puzzle
@@ -12,6 +13,11 @@ namespace Puzzle
         
         [SerializeField]
         private Board board;
+
+        [Header("About Moves")]
+        [SerializeField]
+        private MoveGenerator moveGenerator;
+        [SerializeField] private MovableView movableView;
         
         private void Start()
         {
@@ -37,6 +43,9 @@ namespace Puzzle
                 if (clickedPiece != null)
                 {
                     OnClickPiece(clickedPiece);
+                }
+                else {
+                    Debug.Log("Clicked on empty tile"); 
                 }
             }
         }
@@ -73,7 +82,10 @@ namespace Puzzle
             // test : show movable range
             Debug.Log($"Clicked on {p.color} {p.type} at {p.position}");
 
+            // show movable tiles
+            List<Move> movaleableTiles = moveGenerator.GetAvailableMoves(board, p);
 
+            movableView.ShowMovable(movaleableTiles.ConvertAll(move => move.to));
         }
     }
 }

@@ -73,7 +73,7 @@ namespace Chess
         }
 
         public bool IsTileEmpty(Hex position)
-        {
+        {   
             foreach (Piece piece in pieces)
             {
                 if (piece.position == position)
@@ -82,7 +82,13 @@ namespace Chess
                 }
             }
 
-            return true;
+            // check if the tile is empty
+            foreach (Hex tile in tiles)
+            {
+                if (tile == position) return true;
+            }
+
+            return false;
         }
 
         public bool IsTileOccupiedByOpponent(Hex targetPos, PieceColor pieceColor)

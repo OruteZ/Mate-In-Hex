@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class MovableView : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject movableUIPrefab;
+
+    public void ShowMovable(List<Hex> hexList)
     {
-        
+        foreach (Hex hex in hexList)
+        {
+            GameObject movableUI = Instantiate(movableUIPrefab, transform);
+
+            movableUI.transform.position = hex.ToPixel();
+            movableUI.transform.position = new Vector3(
+                movableUI.transform.position.x,
+                movableUI.transform.position.y,
+                1f // avoid z-fighting with pieces
+            );
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void HideMovable()
     {
-        
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 }

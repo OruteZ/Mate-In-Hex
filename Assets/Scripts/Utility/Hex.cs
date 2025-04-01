@@ -107,6 +107,11 @@ public struct Hex
     {
         return !(a == b);
     }
+
+    public override string ToString()
+    {
+        return $"({q}, {r}, {s})";
+    }
     
     
     #region Static
@@ -114,8 +119,12 @@ public struct Hex
     private const float RADIUS = 1f;
     
     public static Hex[] directions = {
-        new Hex(1, 0, -1), new Hex(1, -1, 0), new Hex(0, -1, 1),
-        new Hex(-1, 0, 1), new Hex(-1, 1, 0), new Hex(0, 1, -1)
+        new Hex(0, 1, -1), // North
+        new Hex(1, 0, -1), // North-East
+        new Hex(1, -1, 0), // South-East
+        new Hex(0, -1, 1), // South
+        new Hex(-1, 0, 1), // South-West
+        new Hex(-1, 1, 0) // North-West
     };
     
     public static Hex Direction(HexDirection direction)

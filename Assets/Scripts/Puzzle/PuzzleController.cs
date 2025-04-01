@@ -28,12 +28,52 @@ namespace Puzzle
             // create board view
             boardView.CreateBoardView(board);
         }
+
+        private void Update() {
+            // check if mouse is clicked
+            if (Input.GetMouseButtonDown(0))
+            {
+                Piece clickedPiece = GetClickedPiece();
+                if (clickedPiece != null)
+                {
+                    OnClickPiece(clickedPiece);
+                }
+            }
+        }
         
         
         [ContextMenu("Refresh Board View")]
         public void RefreshBoardView()
         {
             boardView.RefreshBoardView(board); 
+        }
+
+        public Piece GetClickedPiece()
+        {
+            // Raycast to get the clicked piece : has Layer "ChessPiece"
+        
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            LayerMask layerMask = LayerMask.GetMask("ChessPiece");
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+            {
+                // check if the clicked object has a PieceView component
+                PieceView pieceView = hit.transform.GetComponent<PieceView>();
+                if (pieceView != null)
+                {
+                    return pieceView.piece;
+                }
+            }
+
+            return null;
+        }
+    
+        public void OnClickPiece(Piece p) {
+            // test : show movable range
+            Debug.Log($"Clicked on {p.color} {p.type} at {p.position}");
+
+
         }
     }
 }

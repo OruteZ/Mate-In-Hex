@@ -6,12 +6,12 @@ namespace Chess
     [RequireComponent(typeof(SpriteRenderer))]
     public class PieceView : MonoBehaviour
     {
-        public Piece pieceInfo;
+        public Piece piece;
         public SpriteData spriteData;
         
         public void SetPiece(Piece newPiece)
         {
-            pieceInfo = newPiece;
+            piece = newPiece;
             
             // Set sprite
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: PieceSpriteData
+  m_EditorClassIdentifier: Assembly-CSharp:Chess:SpriteData
+  white:
+  - {fileID: 21300000, guid: 9ab4a82423520634ba56fd204ad4d5e9, type: 3}
+  - {fileID: 21300000, guid: 2a01038d883387c4a837406cc5de7f53, type: 3}
+  - {fileID: 21300000, guid: c5dbd97f062c10b4f8f7870e44a5d5dd, type: 3}
+  - {fileID: 21300000, guid: 179f2527bd3c34143814ac7c09733f9c, type: 3}
+  - {fileID: 21300000, guid: aed83e1c0f94f704f93bb56e3194a5f1, type: 3}
+  - {fileID: 21300000, guid: 221a3941c2ab0e44a905e3ce44e49694, type: 3}
+  black:
+  - {fileID: 21300000, guid: 56fb4c808d19ac94ab5d272a600dff0c, type: 3}
+  - {fileID: 21300000, guid: 236e39aa33ae281478fd26156e5e6e22, type: 3}
+  - {fileID: 21300000, guid: 5c1810a3f4a197540aab860297b1ec31, type: 3}
+  - {fileID: 21300000, guid: 94da1203b8e74fe459c1f553c276b391, type: 3}
+  - {fileID: 21300000, guid: ba3da4f7f19c4ab48a2716e80a7b7dfe, type: 3}
+  - {fileID: 21300000, guid: 75ce7cb78421e904fbfd0d96ce57f0fc, type: 3}

@@ -352,7 +352,6 @@ GameObject:
   - component: {fileID: 1882935957}
   - component: {fileID: 1882935956}
   - component: {fileID: 1882935958}
-  - component: {fileID: 1882935960}
   - component: {fileID: 1882935959}
   m_Layer: 0
   m_Name: 'Chess '
@@ -408,8 +407,9 @@ MonoBehaviour:
   puzzleInfo: {fileID: 11400000, guid: 203a05b99943be14e8d9c07629bc626d, type: 2}
   boardView: {fileID: 1882935956}
   board: {fileID: 0}
-  moveGenerator: {fileID: 1882935960}
   movableView: {fileID: 1882935959}
+  controlState: 0
+  curMovable: []
 --- !u!114 &1882935959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -423,18 +423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movableUIPrefab: {fileID: 495815008113760573, guid: 447c474accbec1842801934049c631dd, type: 3}
---- !u!114 &1882935960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1882935955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b08729740fc24973956d699206ad41f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  movableUIList: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

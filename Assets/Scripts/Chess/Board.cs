@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Puzzle;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,21 +11,28 @@ namespace Chess
     [System.Serializable]
     public class Board : ScriptableObject
     {
-        [SerializeField] private Hex[] tiles;
-        [SerializeField] private Piece[] pieces;
+        [SerializeField] private List<Hex> tiles;
+        [SerializeField] private List<Piece> pieces;
         [SerializeField] private List<Move> moves;
         
         // getter / private setter
-        public Hex[] Tiles => tiles;
-        public Piece[] Pieces => pieces;
+        public List<Hex> Tiles => tiles;
+        public IEnumerable<Piece> Pieces => pieces;
         public List<Move> Moves => moves;
 
         public void InitBoard(PuzzleInfo puzzleInfo)
         {
-            tiles = puzzleInfo.board;
-            pieces = puzzleInfo.pieces;
+            tiles = puzzleInfo.board.Clone() as List<Hex>;
+            pieces = puzzleInfo.pieces.Clone() as List<Piece>;
             moves ??= new List<Move>();
             moves.Clear();
+        }
+
+        public void DeepCopyBoard(Board board)
+        {
+            tiles = new List<Hex>(board.tiles);
+            pieces = new List<Piece>(board.pieces.Select(piece => piece.Clone()));
+            moves = new List<Move>(board.moves);
         }
         
         /// <summary>
@@ -43,6 +52,25 @@ namespace Chess
         /// <returns></returns>
         public bool IsCheck(PieceColor attackColor)
         {
+            // attack color에 해당하는 piece를 찾는다.
+            foreach(Piece p in pieces) {
+                if (p.color != attackColor) continue;
+
+                // check if the piece is in attack range of opponent king
+                List<Move> AtkMoves = MoveGenerator.GetAttacks(this, p);
+
+                foreach (Move move in AtkMoves)
+                {
+                    Piece targetPiece = GetPieceAt(move.to);
+                    if (targetPiece == null || targetPiece.type is not PieceType.King) continue;
+                    
+                    if (targetPiece.type == PieceType.King && targetPiece.color != attackColor)
+                    {
+                        return true;
+                    }
+                }
+            }
+
             return false;
         }
         
@@ -132,6 +160,32 @@ namespace Chess
             // Hex middlePos = new (targetPos.x, (lastMove.from.y + lastMove.to.y) / 2);
             // return lastMove.to == middlePos;
             
+            return false;
+        }
+
+        public bool IsAttackableRelation(Piece atk, Piece def) 
+        {
+            // check if the target piece is in the attack range of the attacker
+            if (atk.color == def.color) return false;
+            
+            Hex movVector = def.position - atk.position;
+
+            bool diagonal = movVector.IsDiagonalVector();
+            bool straight = movVector.IsStraightVector();
+
+            // check if the target piece is in the attack range of the attacker
+            if (atk.type == PieceType.Knight) return true;
+            if (atk.type == PieceType.Bishop) return diagonal;
+            if (atk.type == PieceType.Rook) return straight;
+            if (atk.type == PieceType.Queen) return diagonal || straight;
+            if (atk.type == PieceType.King) return (diagonal || straight) && movVector.Length() == 1;
+            if (atk.type == PieceType.Pawn) 
+            {
+                // check if the target piece is in the attack range of the attacker
+                if (atk.color == PieceColor.White) return movVector.Equals(new Hex(1, 1)) || movVector.Equals(new Hex(-1, 1));
+                else return movVector.Equals(new Hex(1, -1)) || movVector.Equals(new Hex(-1, -1));
+            }
+
             return false;
         }
     }

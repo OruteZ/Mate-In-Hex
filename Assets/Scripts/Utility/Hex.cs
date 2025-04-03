@@ -73,6 +73,29 @@ public struct Hex
     {
         return Subtract(b).Length();
     }
+
+    public readonly bool IsDiagonalVector()
+    {
+        int a = Math.Abs(q);
+        int b = Math.Abs(r);
+        int c = Math.Abs(s);
+        
+        // 0이 포함되면 대각선 벡터가 아님
+        if(a == 0 || b == 0 || c == 0)
+            return false;
+        
+        int[] arr = new int[] { a, b, c };
+        Array.Sort(arr); // 오름차순 정렬: [m, m, M]가 되어야 함
+        
+        // m과 M가 k, k, 2k 형태여야 대각선 벡터임.
+        return arr[0] == arr[1] && arr[2] == 2 * arr[0];
+    }
+
+
+    public readonly bool IsStraightVector()
+    {
+        return q == 0 || r == 0 || s == 0;
+    }
     
     public readonly Vector2 ToPixel()
     {
@@ -172,6 +195,11 @@ public struct Hex
         new(-1, 2, -1) // North-West
     };
 
+    public static Hex Diagonal(HexDiagonalDirection direction)
+    {
+        return Hex.diagonals[(int)direction];
+    }
+
     public static List<Hex> GetHexMap(int radius)
     {
         List<Hex> hexMap = new();
@@ -190,8 +218,9 @@ public struct Hex
 
     public static Hex GetHexFromPixel(Vector2 pixel)
     {
-        float q = (pixel.x * SQRT3 / 3 - pixel.y / 3) / RADIUS;
-        float r = pixel.y * 2f / 3 / RADIUS;
+        float q = pixel.x / (RADIUS * 1.5f);
+        float r = pixel.y / (RADIUS * SQRT3) - (pixel.x / (RADIUS * 3f));
+
         return new Hex(Mathf.RoundToInt(q), Mathf.RoundToInt(r));
     }
 

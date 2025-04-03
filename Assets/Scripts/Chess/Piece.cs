@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +33,11 @@ namespace Chess {
             color = white;
             type = t;
             position = pos;
+        }
+
+        internal Piece Clone()
+        {
+            throw new NotImplementedException();
         }
     }
 }

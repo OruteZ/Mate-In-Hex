@@ -12,7 +12,6 @@ namespace Puzzle
         [SerializeField] private Board board;
 
         [Header("About Moves")]
-        [SerializeField] private MoveGenerator moveGenerator;
         [SerializeField] private MovableView movableView;
         [SerializeField] private ControlState controlState = ControlState.None;
         [SerializeField] private List<Move> curMovable = new ();
@@ -63,7 +62,24 @@ namespace Puzzle
                         if (clickedPos != Hex.None) 
                         {
                             // check if the clicked tile is in the movable range
-
+                            foreach (Move move in curMovable) 
+                            {
+                                if (move.to.Equals(clickedPos)) 
+                                {
+                                    // apply the move
+                                    board.ApplyMove(move);
+                                    
+                                    // refresh the board view
+                                    RefreshBoardView();
+                                    
+                                    // hide movable range
+                                    movableView.HideMovable();
+                                    
+                                    // reset control state
+                                    controlState = ControlState.None;
+                                    break;
+                                }
+                            }
                         }
                     }
                     break;
@@ -99,19 +115,13 @@ namespace Puzzle
 
         public Hex GetClickedHex()
         {
-            // Raycast to get the clicked tile using 2D physics : has Layer "Tile"
-            LayerMask layerMask = LayerMask.GetMask("Tile");
-            Vector2 origin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.zero, Mathf.Infinity, layerMask);
+            // Alternative method: directly convert mouse position from screen to world coordinates
+            Vector2 screenPos = Input.mousePosition;
+            Vector2 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
 
-            if (hit.collider != null)
-            {
-                Vector2 position = hit.point;
-                Hex result = Hex.GetHexFromPixel(position);
-                return result;
-            }
-
-            return Hex.None; // return a dummy value
+            Hex result = Hex.GetHexFromPixel(worldPos);
+            Debug.Log($"Clicked on tile {result} at {worldPos}");
+            return result;
         }
     
         public void SelectPiece(Piece p) 
@@ -120,7 +130,7 @@ namespace Puzzle
             Debug.Log($"Clicked on {p.color} {p.type} at {p.position}");
 
             // show movable tiles
-            curMovable = moveGenerator.GetAvailableMoves(board, p);
+            curMovable = MoveGenerator.GetMoves(board, p);
             movableView.ShowMovable(curMovable.ConvertAll(move => move.to));
         }
     }

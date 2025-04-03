@@ -5,9 +5,12 @@ using UnityEngine;
 
 namespace Chess
 {
-    public class MoveGenerator : MonoBehaviour
+    public static class MoveGenerator
     {
-        public List<Move> GetAvailableMoves(Board board, Piece piece)
+        // 해당 이동이 정말 유효한지를 시뮬레이션 하기 위해서 사용하는 보드입니다. 실제 게임 보드와는 다릅니다.
+        private static Board moveResultingBoard = ScriptableObject.CreateInstance<Board>();
+
+        public static List<Move> GetMoves(Board board, Piece piece)
         {
             List<Move> moves = new();
 
@@ -22,11 +25,43 @@ namespace Chess
                 _ => throw new ArgumentOutOfRangeException("Invalid piece type : " + piece.type),
             };
 
-            
             return moves;
         }
 
-        private IEnumerable<Move> GetKingMoves(Board board, Piece piece) {
+        /// <summary>
+        /// 현재 이 기물이 공격중인 기물을 확인합니다. 체크에 사용하기 때문에 Pin같은 사유를 고려하지 않습니다.
+        /// </summary>
+        /// <param name="board"></param>
+        /// <param name="piece"></param>
+        /// <returns></returns>
+        public static List<Move> GetAttacks(Board board, Piece piece)
+        {
+            List<Move> moves = GetMoves(board, piece);
+            return moves.Where(m => m.flags.HasFlag(MoveFlag.Capture)).ToList();
+        }
+
+        public static List<Move> GetAvailableMoves(Board board, Piece piece)
+        {
+            List<Move> moves = GetMoves(board, piece);
+            List<Move> availableMoves = new List<Move>(moves.Count);
+
+            // 이동후 check를 당하는지 확인
+            moveResultingBoard.DeepCopyBoard(board);
+
+            foreach (Move move in moves)
+            {
+                // 이동
+                moveResultingBoard.ApplyMove(move);
+                
+                if (moveResultingBoard.IsCheck(piece.color) is false) availableMoves.Add(move);
+                moveResultingBoard.UndoMove(move);
+            }
+
+            return availableMoves;
+        }
+
+        private static IEnumerable<Move> GetKingMoves(Board board, Piece piece) 
+        {
             List<Move> moves = new();
             
             // get all 6 directions
@@ -45,7 +80,7 @@ namespace Chess
                     });
                 }
 
-                if(board.IsTileOccupiedByOpponent(nextPos, piece.color))
+                if (board.IsTileOccupiedByOpponent(nextPos, piece.color))
                 {
                     var captureMove = new Move
                     {
@@ -74,7 +109,7 @@ namespace Chess
                     });
                 }
 
-                if(board.IsTileOccupiedByOpponent(nextPos, piece.color))
+                if (board.IsTileOccupiedByOpponent(nextPos, piece.color))
                 {
                     var captureMove = new Move
                     {
@@ -91,7 +126,8 @@ namespace Chess
             return moves;
         }
 
-        private IEnumerable<Move> GetQueenMoves(Board board, Piece piece) {
+        private static IEnumerable<Move> GetQueenMoves(Board board, Piece piece) 
+        {
             List<Move> moves = new();
             
             // get rook moves
@@ -103,7 +139,7 @@ namespace Chess
             return moves;
         }
 
-        private IEnumerable<Move> GetBishopMoves(Board board, Piece piece)
+        private static IEnumerable<Move> GetBishopMoves(Board board, Piece piece)
         {
             List<Move> bishopMoves = new();
 
@@ -145,7 +181,7 @@ namespace Chess
             return bishopMoves;
         }
 
-        private IEnumerable<Move> GetKnightMoves(Board board, Piece piece)
+        private static IEnumerable<Move> GetKnightMoves(Board board, Piece piece)
         {
             List<Move> moves = new();
             List<Hex> targetDirections = new()
@@ -196,24 +232,22 @@ namespace Chess
             return moves;
         }
 
-        private IEnumerable<Move> GetPawnMoves(Board board, Piece piece)
+        private static IEnumerable<Move> GetPawnMoves(Board board, Piece piece)
         {
             List<Move> moves = new();
             Hex startPos = piece.position;
 
             Hex direction, forwardMove, captureLeftMove, captureRightMove;
 
-        
             // Move forward one tile
-            if(piece.color is PieceColor.White){
+            if(piece.color is PieceColor.White)
+            {
                 direction = Hex.Direction(HexDirection.N);
                 forwardMove = startPos.Add(direction);
                 captureLeftMove = startPos.Add(Hex.Direction(HexDirection.NW));
                 captureRightMove = startPos.Add(Hex.Direction(HexDirection.NE));
             }
-
-            // if black pawn, reverse direction
-            else //if (piece.color is PieceColor.Black)
+            else
             {
                 direction = Hex.Direction(HexDirection.S);
                 forwardMove = startPos.Add(direction);
@@ -258,9 +292,9 @@ namespace Chess
             return moves;
         }
 
-        private IEnumerable<Move> GetRookMoves(Board board, Piece piece)
+        private static IEnumerable<Move> GetRookMoves(Board board, Piece piece)
         {
-            List<Move> rookMoves;
+            List<Move> rookMoves = new();
             
             void RecursiveMove(Hex curPos, Hex direction)
             {
@@ -279,7 +313,6 @@ namespace Chess
                     
                     RecursiveMove(nextPos, direction);
                 }
-
                 else if (board.IsTileOccupiedByOpponent(nextPos, piece.color))
                 {
                     rookMoves.Add(new Move
@@ -292,8 +325,6 @@ namespace Chess
                 }
             }
             
-            rookMoves = new List<Move>();
-
             // get recursive move in every direction
             foreach (HexDirection direction in Enum.GetValues(typeof(HexDirection)))
             {   
@@ -304,7 +335,6 @@ namespace Chess
                 RecursiveMove(piece.position, dirVector);
             }
 
-            
             return rookMoves;
         }
     }

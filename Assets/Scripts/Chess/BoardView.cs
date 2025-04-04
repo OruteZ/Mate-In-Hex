@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -36,7 +37,15 @@ namespace Chess
         public void CreateBoardView([NotNull] Board board)
         {
             // instantiate tiles
-            foreach (Hex tile in board.Tiles)
+            // 이거 왜 null이지지
+            var tiles = board.Tiles;
+            if(tiles is null) 
+            {
+                Debug.LogError("왜 null이지?");
+                tiles = new List<Hex>();
+            }
+
+            foreach (Hex tile in tiles)
             {
                 Vector3 tilePosition = tile.ToPixel();
                 tilePosition.z = 1; // avoid z-fighting with pieces

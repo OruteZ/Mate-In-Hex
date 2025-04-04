@@ -27,6 +27,11 @@ namespace Chess
         {
             return (flags & flag) == flag;
         }
+
+        public override string ToString()
+        {
+            return $"{color} {pieceType} {from} -> {to} {flags}";
+        }
     }
 
     [System.Flags, System.Serializable]

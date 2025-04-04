@@ -10,7 +10,7 @@ namespace Chess
         // 해당 이동이 정말 유효한지를 시뮬레이션 하기 위해서 사용하는 보드입니다. 실제 게임 보드와는 다릅니다.
         private static Board moveResultingBoard = ScriptableObject.CreateInstance<Board>();
 
-        public static List<Move> GetMoves(Board board, Piece piece)
+        private static List<Move> GetMoves(Board board, Piece piece)
         {
             List<Move> moves = new();
 
@@ -53,7 +53,7 @@ namespace Chess
                 // 이동
                 moveResultingBoard.ApplyMove(move);
                 
-                if (moveResultingBoard.IsCheck(piece.color) is false) availableMoves.Add(move);
+                if (moveResultingBoard.IsCheck(piece.OpponentColor) is false) availableMoves.Add(move);
                 moveResultingBoard.UndoMove(move);
             }
 
@@ -153,7 +153,7 @@ namespace Chess
                     {
                         color = piece.color,
                         pieceType = piece.type,
-                        from = curPos,
+                        from = piece.position,
                         to = nextPos
                     });
                     
@@ -165,7 +165,7 @@ namespace Chess
                     {
                         color = piece.color,
                         pieceType = piece.type,
-                        from = curPos,
+                        from = piece.position,
                         to = nextPos,
                         flags = MoveFlag.Capture
                     });
@@ -275,7 +275,8 @@ namespace Chess
                     color = piece.color,
                     pieceType = piece.type,
                     from = startPos,
-                    to = captureLeftMove
+                    to = captureLeftMove,
+                    flags = MoveFlag.Capture
                 });
             }
             if (board.IsTileOccupiedByOpponent(captureRightMove, piece.color))
@@ -285,7 +286,8 @@ namespace Chess
                     color = piece.color,
                     pieceType = piece.type,
                     from = startPos,
-                    to = captureRightMove
+                    to = captureRightMove,
+                    flags = MoveFlag.Capture
                 });
             }
 
@@ -307,7 +309,7 @@ namespace Chess
                     {
                         color = piece.color,
                         pieceType = piece.type,
-                        from = curPos,
+                        from = piece.position,
                         to = nextPos
                     });
                     
@@ -319,8 +321,9 @@ namespace Chess
                     {
                         color = piece.color,
                         pieceType = piece.type,
-                        from = curPos,
-                        to = nextPos
+                        from = piece.position,
+                        to = nextPos,
+                        flags = MoveFlag.Capture
                     });
                 }
             }

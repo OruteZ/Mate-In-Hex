@@ -28,6 +28,8 @@ namespace Chess {
         
         public Hex position;
 
+        public PieceColor OpponentColor => color == PieceColor.White ? PieceColor.Black : PieceColor.White;
+
         public Piece(PieceColor white, PieceType t, Hex pos)
         {
             color = white;
@@ -37,7 +39,7 @@ namespace Chess {
 
         internal Piece Clone()
         {
-            throw new NotImplementedException();
+            return new Piece(color, type, position);
         }
     }
 }

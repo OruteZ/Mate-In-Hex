@@ -11,6 +11,7 @@ namespace Chess
     [System.Serializable]
     public class Board : ScriptableObject
     {
+        // 직렬화하면 null일수 없지않나?
         [SerializeField] private List<Hex> tiles;
         [SerializeField] private List<Piece> pieces;
         [SerializeField] private List<Move> moves;
@@ -22,8 +23,9 @@ namespace Chess
 
         public void InitBoard(PuzzleInfo puzzleInfo)
         {
-            tiles = puzzleInfo.board.Clone() as List<Hex>;
-            pieces = puzzleInfo.pieces.Clone() as List<Piece>;
+            // 여기가 문제인가?
+            tiles = new List<Hex>(puzzleInfo.board);
+            pieces = new List<Piece>(puzzleInfo.pieces.Select(piece => piece.Clone()));
             moves ??= new List<Move>();
             moves.Clear();
         }
@@ -64,7 +66,7 @@ namespace Chess
                     Piece targetPiece = GetPieceAt(move.to);
                     if (targetPiece == null || targetPiece.type is not PieceType.King) continue;
                     
-                    if (targetPiece.type == PieceType.King && targetPiece.color != attackColor)
+                    if (targetPiece.OpponentColor == attackColor)
                     {
                         return true;
                     }
@@ -81,10 +83,15 @@ namespace Chess
             foreach (Piece piece in pieces)
             {
                 if (piece.position != move.from) continue;
-                
+                if (piece.type != move.pieceType) continue;
+                if (piece.color != move.color) continue;
+
                 piece.position = move.to;
                 break;
             }
+
+            // 3. add move to the list of moves
+            moves.Add(move);
         }
         
         public void UndoMove(Move move)
@@ -98,6 +105,9 @@ namespace Chess
                 piece.position = move.from;
                 break;
             }
+
+            // 3. remove move from the list of moves
+            moves.Remove(move);
         }
 
         public Piece GetPieceAt(Hex position)

@@ -77,6 +77,18 @@ namespace Puzzle
                                     
                                     // reset control state
                                     controlState = ControlState.None;
+
+
+                                    // debug : show check
+                                    if(board.IsCheck(move.color)) 
+                                    {
+                                        Debug.Log($"{move.color} is in check after move {move}");
+                                    } 
+                                    else 
+                                    {
+                                        Debug.Log($"{move.color} is not in check after move {move}");
+                                    }
+
                                     break;
                                 }
                             }
@@ -130,7 +142,7 @@ namespace Puzzle
             Debug.Log($"Clicked on {p.color} {p.type} at {p.position}");
 
             // show movable tiles
-            curMovable = MoveGenerator.GetMoves(board, p);
+            curMovable = MoveGenerator.GetAvailableMoves(board, p);
             movableView.ShowMovable(curMovable.ConvertAll(move => move.to));
         }
     }

@@ -1,4 +1,6 @@
-﻿using Chess;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Chess;
 using UnityEngine;
 
 namespace Puzzle
@@ -6,19 +8,18 @@ namespace Puzzle
     [CreateAssetMenu(fileName = "PuzzleInfo", menuName = "Puzzle/PuzzleInfo", order = 0)]
     public class PuzzleInfo : ScriptableObject
     {
-        public Hex[] board;
-        public Piece[] pieces;
-        public Move[] solution;
+        public List<Hex> board;
+        public List<Piece> pieces;
+        public List<Move> solution;
 
         [ContextMenu("Create basic puzzle")]
         public void CreateBasicPuzzle()
         {
-            board = Hex.GetHexMap(4).ToArray();
+            board = Hex.GetHexMap(4).ToList();
             
-            pieces = new Piece[]
-            {
-                new(PieceColor.White, PieceType.King, new Hex(0, 0)),
-                new(PieceColor.Black, PieceType.King, new Hex(1, 0)),
+            pieces = new List<Piece>() {
+                new(PieceColor.White, PieceType.Pawn, new Hex(0, 0)),
+                new(PieceColor.White, PieceType.Rook, new Hex(1, 0)),
             };
         }
     }

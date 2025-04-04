@@ -86,7 +86,14 @@ namespace Chess
                 if (piece.type != move.pieceType) continue;
                 if (piece.color != move.color) continue;
 
+                
+                if(move.HasFlag(MoveFlag.Capture)) 
+                {
+                    // remove the captured piece from the board
+                    pieces.Remove(GetPieceAt(move.to));
+                }
                 piece.position = move.to;
+
                 break;
             }
 
@@ -103,6 +110,14 @@ namespace Chess
                 if (piece.position != move.to) continue;
                 
                 piece.position = move.from;
+
+                if (move.HasFlag(MoveFlag.Capture)) 
+                {
+                    // add the captured piece back to the board
+                    Piece capturedPiece = new(1 - move.color, move.capturedPieceType, move.to);
+                    pieces.Add(capturedPiece);
+                }
+
                 break;
             }
 

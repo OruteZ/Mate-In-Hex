@@ -25,6 +25,21 @@ namespace Chess
                 _ => throw new ArgumentOutOfRangeException("Invalid piece type : " + piece.type),
             };
 
+            for (int i = 0; i < moves.Count; i++)
+            {
+                if (moves[i].HasFlag(MoveFlag.Capture))
+                {
+                    // save the captured piece
+                    Piece captured = board.GetPieceAt(moves[i].to);
+                    if (captured != null)
+                    {
+                        Move move = moves[i];
+                        move.capturedPieceType = captured.type;
+                        moves[i] = move;
+                    }
+                }
+            }
+
             return moves;
         }
 

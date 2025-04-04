@@ -12,6 +12,7 @@ namespace Chess
         public Hex to;
 
         public MoveFlag flags;
+        public PieceType capturedPieceType;
 
         public void SetFlag(MoveFlag flag)
         {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Chess {
-    [System.Serializable]
+    [Serializable]
     public enum PieceType {
         Pawn,
         Rook,
@@ -14,13 +14,13 @@ namespace Chess {
         King
     }
     
-    [System.Serializable]
+    [Serializable]
     public enum PieceColor {
         White,
         Black
     }
     
-    [System.Serializable]
+    [Serializable]
     public class Piece
     {
         public PieceColor color;

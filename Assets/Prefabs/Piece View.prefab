@@ -106,7 +106,7 @@ MonoBehaviour:
       q: 0
       r: 0
       s: 0
-  spriteData: {fileID: 11400000, guid: 3eb88975ffd3b654089cc03a8f5af47d, type: 2}
+  spriteData: {fileID: 11400000, guid: 04ab70e201219a4478420de68ddb9266, type: 2}
 --- !u!50 &5370940589624468117
 Rigidbody2D:
   serializedVersion: 4

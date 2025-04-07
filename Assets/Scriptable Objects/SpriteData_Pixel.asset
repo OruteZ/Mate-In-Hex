@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: PieceSpriteData
-  m_EditorClassIdentifier: Assembly-CSharp:Chess:SpriteData
+  m_Script: {fileID: 11500000, guid: 5812ca3f8e1df734288a281b7aa2ad90, type: 3}
+  m_Name: SpriteData_Pixel
+  m_EditorClassIdentifier: 
   white:
   - {fileID: 21300000, guid: 9ab4a82423520634ba56fd204ad4d5e9, type: 3}
   - {fileID: 21300000, guid: 2a01038d883387c4a837406cc5de7f53, type: 3}

@@ -58,7 +58,7 @@ namespace Chess
         public static List<Move> GetAvailableMoves(Board board, Piece piece)
         {
             List<Move> moves = GetMoves(board, piece);
-            List<Move> availableMoves = new List<Move>(moves.Count);
+            List<Move> availableMoves = new(moves.Count);
 
             // 이동후 check를 당하는지 확인
             moveResultingBoard.DeepCopyBoard(board);

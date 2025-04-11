@@ -8,7 +8,7 @@ namespace Chess
     public static class MoveGenerator
     {
         // 해당 이동이 정말 유효한지를 시뮬레이션 하기 위해서 사용하는 보드입니다. 실제 게임 보드와는 다릅니다.
-        private static Board moveResultingBoard = ScriptableObject.CreateInstance<Board>();
+        private static readonly Board moveResultingBoard = ScriptableObject.CreateInstance<Board>();
 
         private static List<Move> GetMoves(Board board, Piece piece)
         {

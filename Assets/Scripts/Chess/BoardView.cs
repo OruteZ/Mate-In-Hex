@@ -11,14 +11,15 @@ namespace Chess
     {
         public GameObject tilePrefab;
         public GameObject piecePrefab;
+
+        public SpriteRenderer backBoard;
         
-        public Color lightTileColor;
-        public Color darkTileColor;
-        public Color grayTileColor;
+        public Palette palette;
 
         private void Awake()
         {
             NullCheck();
+            backBoard.color = palette.backGround;
         }
         
         private void NullCheck()
@@ -60,13 +61,7 @@ namespace Chess
                 
                 // set tile color
                 int colorNum = tile.GetTileKind();
-                tileGo.GetComponent<SpriteRenderer>().color = colorNum switch
-                {
-                    0 => lightTileColor,
-                    1 => darkTileColor,
-                    2 => grayTileColor,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
+                tileGo.GetComponent<SpriteRenderer>().color = palette.tileColor[colorNum];
             }
             
             // instantiate pieces

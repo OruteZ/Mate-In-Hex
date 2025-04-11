@@ -7,6 +7,8 @@ public class MovableView : MonoBehaviour
     [SerializeField] private GameObject movableUIPrefab;
     [SerializeField] private List<GameObject> movableUIList = new List<GameObject>();
 
+    [SerializeField] private Palette palette;
+
     public void ShowMovable(List<Hex> hexList)
     {
         if(movableUIList.Count > 0)
@@ -25,6 +27,7 @@ public class MovableView : MonoBehaviour
                 -1f // avoid z-fighting with pieces
             );
 
+            movableUI.GetComponent<SpriteRenderer>().color = palette.point;
             movableUIList.Add(movableUI);
         }
     }

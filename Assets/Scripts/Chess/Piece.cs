@@ -11,7 +11,7 @@ namespace Chess {
         Knight,
         Bishop,
         Queen,
-        King
+        King,
     }
     
     [Serializable]

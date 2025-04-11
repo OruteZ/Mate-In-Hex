@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890fb263ef68f0d48b18ba335fda3664, type: 3}
+  m_Name: retro_soda_pastel
+  m_EditorClassIdentifier: 
+  backGround: {r: 1, g: 0.9764706, b: 0.9411765, a: 1}
+  tileColor:
+  - {r: 1, g: 0.67058825, b: 0.67058825, a: 1}
+  - {r: 1, g: 0.8392157, b: 0.64705884, a: 1}
+  - {r: 0.99215686, g: 1, b: 0.7137255, a: 1}
+  pieceColor:
+  - {r: 0.26666668, g: 0.26666668, b: 0.26666668, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  point: {r: 0.627451, g: 0.76862746, b: 1, a: 1}
+  csvString: 'retro_soda_pastel,#FFF9F0,#FFABAB,#FFD6A5,#FDFFB6,#444444,#FFFFFF,#A0C4FF
+
+'

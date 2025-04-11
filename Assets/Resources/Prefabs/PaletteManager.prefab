@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6061733299301012930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8891286660338536454}
+  - component: {fileID: 6098843552977009206}
+  m_Layer: 0
+  m_Name: PaletteManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8891286660338536454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6061733299301012930}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 971.1799, y: 461.9589, z: -0.12541708}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6098843552977009206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6061733299301012930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa46eee71316b3c43a2efe90ccb12bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  palettes:
+  - {fileID: 11400000, guid: 0622dbaebf27c554396e0af97214c42b, type: 2}
+  - {fileID: 11400000, guid: 9e307a8c3dd00b744b899786a38c6f5f, type: 2}
+  - {fileID: 11400000, guid: df2e4a18aeff2cb4a9b46f0bf167f021, type: 2}
+  - {fileID: 11400000, guid: 46b21b2612a3a7543914ad33b92df472, type: 2}
+  - {fileID: 11400000, guid: 18f56e16301563d45bab98c9a613fa7d, type: 2}
+  - {fileID: 11400000, guid: f85b66a6181e20742abb4ec6835150a8, type: 2}
+  - {fileID: 11400000, guid: 122fab16f1567b046a1f92155c1480ec, type: 2}
+  - {fileID: 11400000, guid: 81d657135fe1d134899e5c9a75777325, type: 2}
+  - {fileID: 11400000, guid: 9c24f50134308224aadab231dd1a3185, type: 2}
+  currentPalette: {fileID: 11400000, guid: 9c24f50134308224aadab231dd1a3185, type: 2}

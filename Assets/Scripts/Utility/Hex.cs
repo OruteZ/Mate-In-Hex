@@ -28,7 +28,7 @@ public struct Hex
     public readonly int R => r;
     public readonly int S => s;
 
-    public static readonly Hex None = new (1000, 1000);
+    public static readonly Hex NONE = new (1000, 1000);
     
     public Hex(int q, int r, int s)
     {
@@ -109,9 +109,10 @@ public struct Hex
         int v = q + (r * 2);
         
         // v가 음수일경우 양수일때까지 3 더하기
-        while (v < 0)
+        if (v < 0)
         {
-            v += 3;
+            int k = Math.Abs(v) / 3;
+            v += (k + 1) * 3;
         }
 
         return v % 3;
@@ -156,7 +157,7 @@ public struct Hex
 
     #endregion
 
-    public override readonly string ToString()
+    public readonly override string ToString()
     {
         return $"({q}, {r}, {s})";
     }

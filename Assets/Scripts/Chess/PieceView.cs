@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 namespace Chess
@@ -8,6 +11,7 @@ namespace Chess
     {
         public Piece piece;
         public SpriteData spriteData;
+        public float speed = 5f;
         
         public void SetPiece(Piece newPiece)
         {
@@ -29,6 +33,20 @@ namespace Chess
         private Sprite GetSprite(Piece targetPiece)
         {
             return spriteData.GetSprite(targetPiece);
+        }
+        
+        public void TweenMove(Vector3 targetPosition, Action onComplete = null)
+        {
+            // Calculate distance between current position and target position
+            float distance = Vector3.Distance(transform.position, targetPosition);
+
+            // Calculate duration based on fixed speed
+            float duration = distance / speed;
+
+            // Move the piece to the target position over the calculated duration
+            LeanTween.move(gameObject, targetPosition, duration)
+                .setEase(LeanTweenType.linear)
+                .setOnComplete(onComplete);
         }
     }
 }

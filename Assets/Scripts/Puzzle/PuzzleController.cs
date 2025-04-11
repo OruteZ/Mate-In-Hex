@@ -59,7 +59,7 @@ namespace Puzzle
                     if (Input.GetMouseButtonDown(0)) 
                     {
                         Hex clickedPos = GetClickedHex();
-                        if (clickedPos != Hex.None) 
+                        if (clickedPos != Hex.NONE) 
                         {
                             // check if the clicked tile is in the movable range
                             foreach (Move move in curMovable) 
@@ -70,7 +70,7 @@ namespace Puzzle
                                     board.ApplyMove(move);
                                     
                                     // refresh the board view
-                                    RefreshBoardView();
+                                    boardView.RefreshBoardView(board, true); 
                                     
                                     // hide movable range
                                     movableView.HideMovable();
@@ -106,6 +106,7 @@ namespace Puzzle
         {
             boardView.RefreshBoardView(board); 
         }
+        
 
         public Piece GetClickedPiece()
         {

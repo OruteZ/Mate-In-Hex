@@ -107,6 +107,7 @@ MonoBehaviour:
       r: 0
       s: 0
   spriteData: {fileID: 11400000, guid: 04ab70e201219a4478420de68ddb9266, type: 2}
+  speed: 20
 --- !u!50 &5370940589624468117
 Rigidbody2D:
   serializedVersion: 4

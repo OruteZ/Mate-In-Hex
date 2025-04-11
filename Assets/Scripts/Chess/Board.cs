@@ -103,6 +103,12 @@ namespace Chess
         
         public void UndoMove(Move move)
         {
+            if (!Equals(move, moves.Last()))
+            {
+                Debug.LogError("UndoMove: move is not the last move");
+                return;
+            }
+            
             // 1. find target Piece that was moved
             // 2. move it back to the original position
             foreach (Piece piece in pieces)

@@ -11,6 +11,8 @@ namespace Chess
     {
         public GameObject tilePrefab;
         public GameObject piecePrefab;
+        
+        public Dictionary<Hex, GameObject> pieceList = new ();
 
         public SpriteRenderer backBoard;
 
@@ -33,11 +35,19 @@ namespace Chess
             }
         }
         
-        public void CreateBoardView([NotNull] Board board)
+        public void CreateBoardView([NotNull] Board board, bool showLastMove = false)
         {
-            // instantiate tiles
-            // 이거 왜 null이지지
-            var tiles = board.Tiles;
+            Move lastMove = Move.NONE;
+            if (showLastMove && board.Moves.Count > 0)
+            {
+                // undo last move
+                lastMove = board.Moves.Last();
+                board.UndoMove(lastMove);
+            }
+            
+            
+            
+            List<Hex> tiles = board.Tiles;
             if(tiles is null) 
             {
                 Debug.LogError("왜 null이지?");
@@ -62,6 +72,7 @@ namespace Chess
                 tileGo.GetComponent<SpriteRenderer>().color = PaletteManager.Instance.CurrentPalette.tileColor[colorNum];
             }
             
+            pieceList.Clear();
             // instantiate pieces
             foreach (Piece piece in board.Pieces)
             {
@@ -82,10 +93,34 @@ namespace Chess
                 }
                 
                 pieceGo.transform.SetParent(transform);
+                pieceGo.name = $"{piece.color} {piece.type} {piece.position}";
+                pieceList.Add(piece.position, pieceGo);
+            }
+
+            if (lastMove.IsNoneValue()) return;
+            board.ApplyMove(lastMove);
+            
+            // show last move
+            // 1. get piece view from
+            if (pieceList.TryGetValue(lastMove.from, out var go))
+            {
+                // 2. move piece to target position
+                Vector3 targetPosition = lastMove.to.ToPixel();
+                targetPosition.z = go.transform.position.z;
+                go.GetComponent<PieceView>().TweenMove(targetPosition, () =>
+                {
+                    // 3. set the piece position in the pieceList
+                    pieceList.Remove(lastMove.from);
+                    pieceList.Add(lastMove.to, go);
+                });
+            }
+            else
+            {
+                Debug.LogError("Piece not found in pieceList");
             }
         }
         
-        public void RefreshBoardView(Board board)
+        public void RefreshBoardView(Board board, bool animLastMove = false)
         {
             // destroy all children
             foreach (Transform child in transform)
@@ -94,7 +129,7 @@ namespace Chess
             }
             
             // create board view
-            CreateBoardView(board);
+            CreateBoardView(board, animLastMove);
         }
     }
 }

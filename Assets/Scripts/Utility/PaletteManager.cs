@@ -24,13 +24,14 @@ public class PaletteManager : Singleton<PaletteManager>
         }
 
         // Set the first palette as the current one
-        CurrentPalette = palettes[0];
+        
+        CurrentPalette ??= palettes[0];
     }
 
     private void ApplyPalette()
     {
         // Apply the current palette to all relevant components in the scene
-        foreach (var palette in palettes)
+        foreach (Palette palette in palettes)
         {
             if (palette == currentPalette)
             {

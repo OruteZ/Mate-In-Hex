@@ -25,6 +25,9 @@ namespace Chess
         {
             // 여기가 문제인가?
             tiles = new List<Hex>(puzzleInfo.board);
+            //sort tiles
+            tiles.Sort((a, b) => a.CompareTo(b));
+            
             pieces = new List<Piece>(puzzleInfo.pieces.Select(piece => piece.Clone()));
             moves ??= new List<Move>();
             moves.Clear();
@@ -33,6 +36,8 @@ namespace Chess
         public void DeepCopyBoard(Board board)
         {
             tiles = new List<Hex>(board.tiles);
+            tiles.Sort((a, b) => a.CompareTo(b));
+            
             pieces = new List<Piece>(board.pieces.Select(piece => piece.Clone()));
             moves = new List<Move>(board.moves);
         }
@@ -155,10 +160,14 @@ namespace Chess
             }
 
             // check if the tile is empty
-            foreach (Hex tile in tiles)
+            // use binary search
+            int idx = tiles.BinarySearch(position);
+            if (idx < 0)
             {
-                if (tile == position) return true;
+                // tile is not in the list
+                return false;
             }
+            
 
             return false;
         }
@@ -176,22 +185,20 @@ namespace Chess
             return false;
         }
 
-        public bool IsEnPassantCapture(Vector2Int targetPos, Piece piece)
+        public bool IsEnPassantCapture(Hex targetPos, Piece piece)
         {
-            // if (piece.type != PieceType.Pawn) return false;
-            // if (moves.Count == 0) return false;
-            // Move lastMove = moves[^1];
-            //
-            // if (lastMove.pieceType is not PieceType.Pawn) return false;
-            // if (lastMove.color == piece.color) return false;
-            //
-            // int moveLength = Mathf.Abs(lastMove.from.y - lastMove.to.y);
-            // if (moveLength != 2) return false;
-            //
-            // Hex middlePos = new (targetPos.x, (lastMove.from.y + lastMove.to.y) / 2);
-            // return lastMove.to == middlePos;
+            if (piece.type != PieceType.Pawn) return false;
+            if (moves.Count == 0) return false;
+            Move lastMove = moves[^1];
             
-            return false;
+            if (lastMove.pieceType is not PieceType.Pawn) return false;
+            if (lastMove.color == piece.color) return false;
+            
+            Hex movVector = lastMove.to - lastMove.from;
+            if (movVector.Length() != 2) return false;
+            
+            Hex middlePos = lastMove.from + movVector.Scale(0.5f);
+            return targetPos == middlePos;
         }
 
         public bool IsAttackableRelation(Piece atk, Piece def) 
@@ -204,20 +211,21 @@ namespace Chess
             bool diagonal = movVector.IsDiagonalVector();
             bool straight = movVector.IsStraightVector();
 
-            // check if the target piece is in the attack range of the attacker
-            if (atk.type == PieceType.Knight) return true;
-            if (atk.type == PieceType.Bishop) return diagonal;
-            if (atk.type == PieceType.Rook) return straight;
-            if (atk.type == PieceType.Queen) return diagonal || straight;
-            if (atk.type == PieceType.King) return (diagonal || straight) && movVector.Length() == 1;
-            if (atk.type == PieceType.Pawn) 
+            return atk.type switch
             {
                 // check if the target piece is in the attack range of the attacker
-                if (atk.color == PieceColor.White) return movVector.Equals(new Hex(1, 1)) || movVector.Equals(new Hex(-1, 1));
-                else return movVector.Equals(new Hex(1, -1)) || movVector.Equals(new Hex(-1, -1));
-            }
-
-            return false;
+                PieceType.Knight => true,
+                PieceType.Bishop => diagonal,
+                PieceType.Rook => straight,
+                PieceType.Queen => diagonal || straight,
+                PieceType.King => (diagonal || straight) && movVector.Length() == 1,
+                // check if the target piece is in the attack range of the attacker
+                PieceType.Pawn when atk.color == PieceColor.White => movVector.Equals(Hex.Direction(HexDirection.NE)) ||
+                                                                     movVector.Equals(Hex.Direction(HexDirection.NW)),
+                PieceType.Pawn => movVector.Equals(Hex.Direction(HexDirection.SE)) ||
+                                  movVector.Equals(Hex.Direction(HexDirection.SW)),
+                _ => false
+            };
         }
     }
 }

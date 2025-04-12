@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable] 
-public struct Hex
+public struct Hex : IComparable<Hex>
 {
     public readonly bool Equals(Hex other)
     {
@@ -52,9 +52,20 @@ public struct Hex
     }
 
 
-    public readonly Hex Scale(int k)
+    public readonly Hex Scale(float k)
     {
-        return new Hex(q * k, r * k, s * k);
+        return new Hex((int)(q * k), (int)(r * k), (int)(s * k));
+    }
+    
+    public int CompareTo(Hex other)
+    {
+        int qComparison = q.CompareTo(other.q);
+        if (qComparison != 0) return qComparison;
+
+        int rComparison = r.CompareTo(other.r);
+        if (rComparison != 0) return rComparison;
+
+        return s.CompareTo(other.s);
     }
         
     public Hex DiagonalNeighbor(HexDiagonalDirection direction)

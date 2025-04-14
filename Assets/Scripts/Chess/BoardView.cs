@@ -109,9 +109,21 @@ namespace Chess
                 targetPosition.z = go.transform.position.z;
                 go.GetComponent<PieceView>().TweenMove(targetPosition, () =>
                 {
-                    // 3. set the piece position in the pieceList
+                    // 3. If Capture Someone, destroy the captured piece
+                    if (lastMove.HasFlag(MoveFlag.Capture))
+                    {
+                        if (pieceList.TryGetValue(lastMove.to, out var capturedPieceGo))
+                        {
+                            Destroy(capturedPieceGo);
+                            pieceList.Remove(lastMove.to);
+                        }
+                    }
+
+                    // 4. set the piece position in the pieceList
                     pieceList.Remove(lastMove.from);
                     pieceList.Add(lastMove.to, go);
+
+                    
                 });
             }
             else

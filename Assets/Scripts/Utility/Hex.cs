@@ -117,13 +117,12 @@ public struct Hex : IComparable<Hex>
 
     public readonly int GetTileKind()
     {
-        int v = q + (r * 2);
+        int v = q-r;
         
         // v가 음수일경우 양수일때까지 3 더하기
-        if (v < 0)
+        while(v < 0)
         {
-            int k = Math.Abs(v) / 3;
-            v += (k + 1) * 3;
+            v += 3;
         }
 
         return v % 3;

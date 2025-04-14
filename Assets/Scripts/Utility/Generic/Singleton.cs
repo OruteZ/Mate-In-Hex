@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
@@ -20,13 +21,28 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             {
                 if (_instance == null)
                 {
-                    _instance = (T)FindObjectOfType(typeof(T));
-
-                    if (FindObjectsOfType(typeof(T)).Length > 1)
-                    {
-                        Debug.LogError("[Singleton] Multiple instances found!");
-                        return _instance;
-                    }
+                    #if UNITY_EDITOR
+                                        // In editor, search even inactive objects (exclude assets)
+                                        var instances = UnityEngine.Resources.FindObjectsOfTypeAll<T>()
+                                            .Where(x => !UnityEditor.EditorUtility.IsPersistent(x))
+                                            .ToArray();
+                                        if (instances.Length > 0)
+                                        {
+                                            _instance = instances[0];
+                                        }
+                                        if (instances.Length > 1)
+                                        {
+                                            Debug.LogError("[Singleton] Multiple instances found!");
+                                            return _instance;
+                                        }
+                    #else
+                                        _instance = (T)FindObjectOfType(typeof(T));
+                                        if (FindObjectsOfType(typeof(T)).Length > 1)
+                                        {
+                                            Debug.LogError("[Singleton] Multiple instances found!");
+                                            return _instance;
+                                        }
+                    #endif
 
                     if (_instance == null)
                     {
@@ -63,5 +79,18 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     protected virtual void OnDestroy()
     {
         _applicationIsQuitting = true;
+    }
+
+    protected virtual void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this as T;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 }

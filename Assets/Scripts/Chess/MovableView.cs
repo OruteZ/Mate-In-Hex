@@ -25,7 +25,9 @@ public class MovableView : MonoBehaviour
                 -1f // avoid z-fighting with pieces
             );
 
-            movableUI.GetComponent<SpriteRenderer>().color = PaletteManager.Instance.CurrentPalette.point;
+            var spriteRenderer = movableUI.GetComponent<SpriteRenderer>();
+            var paletteColor = PaletteManager.Instance.CurrentPalette.point;
+            spriteRenderer.color = new Color(paletteColor.r, paletteColor.g, paletteColor.b, spriteRenderer.color.a);
             movableUIList.Add(movableUI);
         }
     }

@@ -15,8 +15,14 @@ public class PaletteManager : Singleton<PaletteManager>
         }
     }
 
-    public void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        if(this == null)
+        {
+            return;
+        }
+
         if (palettes.Length == 0)
         {
             Debug.LogError("No palettes found. Please assign palettes in the inspector.");

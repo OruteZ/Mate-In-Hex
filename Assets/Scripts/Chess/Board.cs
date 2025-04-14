@@ -49,7 +49,28 @@ namespace Chess
         /// <returns></returns>
         public bool IsCheckmate(PieceColor attackColor)
         {
-            return false;
+            // check if the king is in check
+            Piece king = pieces.FirstOrDefault(p => p.type == PieceType.King && p.color == attackColor);
+            if (king == null) return false;
+            
+            // check if the king can move to any adjacent tile
+            foreach (Hex tile in tiles)
+            {
+                if (tile == king.position) continue;
+                if (IsTileOccupiedByOpponent(tile, attackColor)) continue;
+                
+                // check if the tile is not attacked by opponent pieces
+                bool isSafe = true;
+                foreach (Piece piece in pieces)
+                {
+                    if (piece.color == attackColor) continue;
+                    if (IsAttackableRelation(piece, king)) isSafe = false;
+                }
+
+                if (isSafe) return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -161,13 +182,21 @@ namespace Chess
 
             // check if the tile is empty
             // use binary search
-            int idx = tiles.BinarySearch(position);
-            if (idx < 0)
-            {
-                // tile is not in the list
-                return false;
-            }
+            // int idx = tiles.BinarySearch(position);
+            // if (idx < 0)
+            // {
+            //     // tile is not in the list
+            //     return false;
+            // }
             
+            // use linear search
+            foreach (Hex tile in tiles)
+            {
+                if (tile == position)
+                {
+                    return true;
+                }
+            }
 
             return false;
         }

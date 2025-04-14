@@ -45,7 +45,7 @@ namespace Chess
 
             // Move the piece to the target position over the calculated duration
             LeanTween.move(gameObject, targetPosition, duration)
-                .setEase(LeanTweenType.linear)
+                .setEase(LeanTweenType.easeOutQuad)
                 .setOnComplete(onComplete);
         }
     }

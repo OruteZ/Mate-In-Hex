@@ -1,20 +1,25 @@
 ﻿using System.Collections.Generic;
 using Chess;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Puzzle
 {
     public class PuzzleController : MonoBehaviour
     {
+        [Header("Puzzle Info")]
         public PuzzleInfo puzzleInfo;
+        public bool turnBased = false;
         
+        [Header("References")]
         [SerializeField] private BoardView boardView;
         [SerializeField] private Board board;
 
         [Header("About Moves")]
         [SerializeField] private MovableView movableView;
-        [SerializeField] private ControlState controlState = ControlState.None;
+        [SerializeField] private ControlState controlState = ControlState.Ready;
         [SerializeField] private List<Move> curMovable = new ();
+        [SerializeField] private UnityEvent onMoveFinished;
         
         private void Start()
         {
@@ -36,8 +41,11 @@ namespace Puzzle
             // check if mouse is clicked
             switch(controlState)
             {
-                case ControlState.None:
-                    if (Input.GetMouseButtonDown(0))
+                case ControlState.NotControllable:
+                    // do nothing
+                    break;
+                case ControlState.Ready:
+                    if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.A))
                     {
                         Piece clickedPiece = GetClickedPiece();
                         if (clickedPiece != null)
@@ -45,18 +53,19 @@ namespace Puzzle
                             SelectPiece(clickedPiece);
                             controlState = ControlState.SelectPiece;
                         }
+                        else Debug.Log("Clicked on empty tile or no piece found.");
                     }
                     break;
 
                 case ControlState.SelectPiece:
-                    if(Input.GetMouseButtonDown(1)) 
+                    if(Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.S)) 
                     {
                         // cancel selection
                         movableView.HideMovable();
-                        controlState = ControlState.None;
+                        controlState = ControlState.Ready;
                     }
 
-                    if (Input.GetMouseButtonDown(0)) 
+                    if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.A)) 
                     {
                         Hex clickedPos = GetClickedHex();
                         if (clickedPos != Hex.NONE) 
@@ -76,23 +85,25 @@ namespace Puzzle
                                     movableView.HideMovable();
                                     
                                     // reset control state
-                                    controlState = ControlState.None;
+                                    controlState = ControlState.Ready;
+                                    if (turnBased) 
+                                    {
+                                        // wait for player to click again
+                                        controlState = ControlState.NotControllable;
+                                    }
 
 
                                     // debug : show check
-                                    if(board.IsCheck(move.color)) 
+                                    if(board.IsCheckmate(move.color)) 
                                     {
-                                        Debug.Log($"{move.color} is in check after move {move}");
-                                    } 
-                                    else 
-                                    {
-                                        Debug.Log($"{move.color} is not in check after move {move}");
+                                        Debug.Log($"{move.color} is checkmate after move {move}");
                                     }
 
                                     break;
                                 }
                             }
                         }
+                        else Debug.Log($"Clicked on empty tile {clickedPos}");
                     }
                     break;
 
@@ -144,6 +155,12 @@ namespace Puzzle
 
             // show movable tiles
             curMovable = MoveGenerator.GetAvailableMoves(board, p);
+            Debug.Log($"Available moves for {p.color} {p.type} at {p.position}: {curMovable.Count} moves found.");
+            foreach (Move move in curMovable) 
+            {
+                Debug.Log($"Move: {move.from} -> {move.to}");
+            }
+
             movableView.ShowMovable(curMovable.ConvertAll(move => move.to));
         }
     }
@@ -151,7 +168,8 @@ namespace Puzzle
     [System.Serializable]
     enum ControlState
     {
-        None,
+        Ready,
         SelectPiece,
+        NotControllable,
     }
 }

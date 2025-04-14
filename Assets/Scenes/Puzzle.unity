@@ -486,12 +486,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0243fd903e04396b198b8d0ba7bbee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  puzzleInfo: {fileID: 11400000, guid: 203a05b99943be14e8d9c07629bc626d, type: 2}
+  puzzleInfo: {fileID: 11400000, guid: ed2c3eef8fc4441429b91dc9b602baf7, type: 2}
+  turnBased: 1
   boardView: {fileID: 1882935956}
   board: {fileID: 0}
   movableView: {fileID: 1882935959}
   controlState: 0
   curMovable: []
+  onMoveFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1882935959
 MonoBehaviour:
   m_ObjectHideFlags: 0

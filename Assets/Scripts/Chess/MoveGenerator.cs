@@ -64,9 +64,6 @@ namespace Chess
 
             // 이동후 check를 당하는지 확인
             moveResultingBoard.DeepCopyBoard(board);
-
-            Debug.Log("Called GetAvailableMoves for " + piece.type + " at " + piece.position);
-            Debug.Log("Moves : " + moves.Count);
             foreach (Move move in moves)
             {
                 // 이동
@@ -75,8 +72,6 @@ namespace Chess
                 if (moveResultingBoard.IsCheck(piece.OpponentColor) is false) availableMoves.Add(move);
                 moveResultingBoard.UndoMove(move);
             }
-
-            Debug.Log("Available Moves : " + availableMoves.Count);
 
             return availableMoves;
         }
@@ -318,9 +313,6 @@ namespace Chess
         private static IEnumerable<Move> GetRookMoves(Board board, Piece piece)
         {
             List<Move> rookMoves = new();
-
-            Debug.Log("In GetRookMoves, piece position: " + piece.position);
-            
             
             void RecursiveMove(Hex curPos, Hex direction)
             {
@@ -361,8 +353,6 @@ namespace Chess
                 // start recursive move from the current position
                 RecursiveMove(piece.position, dirVector);
             }
-
-            Debug.Log("In GetRookMoves, rookMoves count: " + rookMoves.Count);
 
             return rookMoves;
         }

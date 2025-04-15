@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77bdb87cac034205b1bba14228bf6eed, type: 3}
-  m_Name: Backrank Mate
+  m_Name: KissOfDeathMate
   m_EditorClassIdentifier: 
   board:
   - q: -4

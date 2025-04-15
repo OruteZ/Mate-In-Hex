@@ -26,7 +26,26 @@ public class MovableView : MonoBehaviour
             );
 
             var spriteRenderer = movableUI.GetComponent<SpriteRenderer>();
-            var paletteColor = PaletteManager.Instance.CurrentPalette.point;
+            var paletteManager = PaletteManager.Instance;
+            if (paletteManager == null)
+            {
+                Debug.LogError("PaletteManager.Instance is null");
+            }
+            else
+            {
+                Debug.Log("PaletteManager.Instance is not null");
+            }
+            var currentPalette = paletteManager != null ? paletteManager.currentPalette : null;
+            if (currentPalette == null)
+            {
+                Debug.LogError("currentPalette is null");
+            }
+            else
+            {
+                Debug.Log("currentPalette is not null");
+            }
+            var paletteColor = currentPalette != null ? currentPalette.point : Color.white;
+            Debug.Log("paletteColor: " + paletteColor);
             spriteRenderer.color = new Color(paletteColor.r, paletteColor.g, paletteColor.b, spriteRenderer.color.a);
             movableUIList.Add(movableUI);
         }

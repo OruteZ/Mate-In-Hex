@@ -7,7 +7,7 @@ public class PaletteManager : Singleton<PaletteManager>
     public Palette currentPalette;
     public Palette CurrentPalette
     {
-        get => currentPalette;
+        get => currentPalette ??= palettes[0];
         set
         {
             currentPalette = value;
@@ -30,7 +30,6 @@ public class PaletteManager : Singleton<PaletteManager>
         }
 
         // Set the first palette as the current one
-        
         CurrentPalette ??= palettes[0];
     }
 

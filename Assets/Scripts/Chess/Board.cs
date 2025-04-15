@@ -49,28 +49,26 @@ namespace Chess
         /// <returns></returns>
         public bool IsCheckmate(PieceColor attackColor)
         {
-            // check if the king is in check
-            Piece king = pieces.FirstOrDefault(p => p.type == PieceType.King && p.color == attackColor);
-            if (king == null) return false;
-            
-            // check if the king can move to any adjacent tile
-            foreach (Hex tile in tiles)
-            {
-                if (tile == king.position) continue;
-                if (IsTileOccupiedByOpponent(tile, attackColor)) continue;
-                
-                // check if the tile is not attacked by opponent pieces
-                bool isSafe = true;
-                foreach (Piece piece in pieces)
-                {
-                    if (piece.color == attackColor) continue;
-                    if (IsAttackableRelation(piece, king)) isSafe = false;
-                }
+            if(!IsCheck(attackColor)) return false;
 
-                if (isSafe) return false;
+            // check opponent's movable count
+            // opponent의 모든 piece에 대해
+            // 1. piece가 이동할 수 있는지 확인
+            // 2. 이동할 수 있는 경우, 이동 후 check인지 확인
+            // 3. 이동할 수 있는 경우, 이동 후 check이 아닌 경우가 하나라도 있으면 false
+            // 4. 이동할 수 있는 경우가 하나도 없으면 true
+            
+            int movableCount = 0;
+            foreach (Piece piece in pieces)
+            {
+                if (piece.color == attackColor) continue;
+                
+                // check if the piece can move to any tile
+                List<Move> moves = MoveGenerator.GetAvailableMoves(this, piece);
+                movableCount += moves.Count;
             }
 
-            return true;
+            return movableCount == 0;
         }
 
         /// <summary>

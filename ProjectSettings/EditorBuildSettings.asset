@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Chess View Sample.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: 659581f6498d4fa44a4b2fc3b803e570
+  - enabled: 1
+    path: Assets/Scenes/Puzzle.unity
+    guid: 29d5b54ed07ea4a478685d5d5079f9cf
+  - enabled: 1
+    path: Assets/Scenes/Selecting Level.unity
+    guid: cad3528a1236e2b47a7a459d11a51e54
   m_configObjects: {}

@@ -44,8 +44,8 @@ namespace Chess
             float duration = distance / speed;
 
             // Move the piece to the target position over the calculated duration
+            Debug.Log("PieceView TweenMove: " + "distance" + distance + " duration: " + duration);
             LeanTween.move(gameObject, targetPosition, duration)
-                .setEase(LeanTweenType.easeOutQuad)
                 .setOnComplete(onComplete);
         }
     }

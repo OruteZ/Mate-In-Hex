@@ -54,4 +54,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 122fab16f1567b046a1f92155c1480ec, type: 2}
   - {fileID: 11400000, guid: 81d657135fe1d134899e5c9a75777325, type: 2}
   - {fileID: 11400000, guid: 9c24f50134308224aadab231dd1a3185, type: 2}
-  currentPalette: {fileID: 11400000, guid: 9c24f50134308224aadab231dd1a3185, type: 2}
+  currentPalette: {fileID: 11400000, guid: df2e4a18aeff2cb4a9b46f0bf167f021, type: 2}

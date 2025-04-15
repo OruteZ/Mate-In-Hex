@@ -144,22 +144,15 @@ namespace Puzzle
             Vector2 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
 
             Hex result = Hex.GetHexFromPixel(worldPos);
-            Debug.Log($"Clicked on tile {result} at {worldPos}");
             return result;
         }
     
         public void SelectPiece(Piece p) 
         {
             // test : show movable range
-            Debug.Log($"Clicked on {p.color} {p.type} at {p.position}");
-
             // show movable tiles
             curMovable = MoveGenerator.GetAvailableMoves(board, p);
-            Debug.Log($"Available moves for {p.color} {p.type} at {p.position}: {curMovable.Count} moves found.");
-            foreach (Move move in curMovable) 
-            {
-                Debug.Log($"Move: {move.from} -> {move.to}");
-            }
+        
 
             movableView.ShowMovable(curMovable.ConvertAll(move => move.to));
         }

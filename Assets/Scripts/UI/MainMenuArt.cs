@@ -9,6 +9,7 @@ public class MainMenuArt : MonoBehaviour
     [Header("Options")]
     [Tooltip("Tile의 Scale입니다. 1일경우 화면을 완벽하게 메우게 됩니다. ")]
     public float tileScale;
+    public float tileDistance = 1.0f;
     public float tileAlpha = 0.5f;
     public float hoverScale = 1.2f;
     public float hoverDuration = 0.5f;
@@ -40,14 +41,14 @@ public class MainMenuArt : MonoBehaviour
         {
             GameObject tile = Instantiate(tilePrefab, tileParent.transform);
             tile.name = $"Tile {hex.Q} {hex.R}";
-            tile.transform.localPosition = hex.ToPixel();
+            // Adjust the tile position based on tileDistance
+            tile.transform.localPosition = hex.ToPixel() * tileDistance;
             tile.transform.localScale *= tileScale;
             var hover = tile.AddComponent<HoverScale>();
             hover.scaleFactor = hoverScale;
             hover.duration = hoverDuration;
 
-
-            if(tile.TryGetComponent(out SpriteRenderer tileSpriteRenderer))
+            if (tile.TryGetComponent(out SpriteRenderer tileSpriteRenderer))
             {
                 tiles.Add(tileSpriteRenderer);
             }
@@ -57,8 +58,6 @@ public class MainMenuArt : MonoBehaviour
                 DestroyImmediate(tile);
             }
         }
-
-        
     }
 
     [ContextMenu("Apply Palette")]

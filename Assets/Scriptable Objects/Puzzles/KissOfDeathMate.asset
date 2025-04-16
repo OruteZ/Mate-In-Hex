@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bdb87cac034205b1bba14228bf6eed, type: 3}
   m_Name: KissOfDeathMate
   m_EditorClassIdentifier: 
-  board:
+  tileList:
   - q: -4
     r: 0
     s: 4
@@ -200,19 +200,19 @@ MonoBehaviour:
   - color: 0
     type: 5
     position:
-      q: 1
-      r: 1
-      s: -2
-  - color: 1
-    type: 5
-    position:
-      q: 4
+      q: 0
       r: 0
-      s: -4
+      s: 0
   - color: 0
     type: 4
     position:
-      q: 0
-      r: -3
-      s: 3
+      q: 1
+      r: 0
+      s: -1
+  - color: 0
+    type: 4
+    position:
+      q: 1
+      r: 0
+      s: -1
   solution: []

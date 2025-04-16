@@ -12,7 +12,7 @@ namespace Chess
         public GameObject tilePrefab;
         public GameObject piecePrefab;
         
-        public Dictionary<Hex, GameObject> pieceList = new ();
+        private readonly Dictionary<Hex, GameObject> pieceList = new ();
 
         public SpriteRenderer backBoard;
 

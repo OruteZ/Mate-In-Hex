@@ -24,7 +24,7 @@ namespace Chess
         public void InitBoard(PuzzleInfo puzzleInfo)
         {
             // 여기가 문제인가?
-            tiles = new List<Hex>(puzzleInfo.board);
+            tiles = new List<Hex>(puzzleInfo.tileList);
             //sort tiles
             tiles.Sort((a, b) => a.CompareTo(b));
             

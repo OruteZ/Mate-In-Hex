@@ -48,5 +48,31 @@ namespace Chess
             LeanTween.move(gameObject, targetPosition, duration)
                 .setOnComplete(onComplete);
         }
+
+        [ContextMenu("Round")]
+        public void Round()
+        {
+            Hex h = Hex.GetHexFromPixel(transform.position);
+            
+            Vector3 targetPosition = h.ToPixel();
+            transform.position = targetPosition;
+        }
+
+        [ContextMenu("Reload Sprite")]
+        public void ResetPosition()
+        {
+            // Get the SpriteRenderer component attached to this GameObject
+            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            
+            // Check if the SpriteRenderer component is found
+            if (spriteRenderer == null)
+            {
+                Debug.LogError("SpriteRenderer component not found on this GameObject." + gameObject.name);
+                return;
+            }
+            
+            // Set the sprite to the default sprite
+            spriteRenderer.sprite = GetSprite(piece);
+        }
     }
 }

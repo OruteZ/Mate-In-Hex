@@ -381,7 +381,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 103891483}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1882935958}
+        m_TargetAssemblyTypeName: BoardEditor, Assembly-CSharp
+        m_MethodName: SaveBoardData
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &103891483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -668,7 +680,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Load Selected
+  m_text: 'Create New
 
 '
   m_isRightToLeft: 0
@@ -895,6 +907,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1020,6 +1033,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56666c5a40171f54783dd416a44f42bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!1 &683292366
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,7 +1553,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000019073486}
+  m_AnchoredPosition: {x: 0, y: 0.0007170931}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1771330325
@@ -1768,7 +1797,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 683292367}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9983197
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1926,7 +1955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 7421485777504260053, guid: d3e37efd047f1da4fba7393ffdbb4f61, type: 3}
-  piecePrefab: {fileID: 8466283162800670657, guid: 5a2afaedfd6a1e94ab4aa7ab915bb317, type: 3}
+  piecePrefab: {fileID: 8466283162800670657, guid: dd03149a9e61c844c9b137caa4c02767, type: 3}
   backBoard: {fileID: 1811448901}
 --- !u!4 &1882935957
 Transform:
@@ -1955,8 +1984,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdd2c706376ebd74a8d2b1b019ab4957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentEditing: {fileID: 0}
+  currentBoard: {fileID: 0}
   boardView: {fileID: 1882935956}
+  puzzleNameInputField: {fileID: 0}
 --- !u!1 &2041362986
 GameObject:
   m_ObjectHideFlags: 0
@@ -1970,7 +2000,7 @@ GameObject:
   - component: {fileID: 2041362989}
   - component: {fileID: 2041362988}
   m_Layer: 5
-  m_Name: Load Button
+  m_Name: Create New
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2039,7 +2069,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2041362989}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1882935958}
+        m_TargetAssemblyTypeName: BoardEditor, Assembly-CSharp
+        m_MethodName: CreateNewPuzzle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2041362989
 MonoBehaviour:
   m_ObjectHideFlags: 0

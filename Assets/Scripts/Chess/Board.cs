@@ -177,15 +177,6 @@ namespace Chess
                     return false;
                 }
             }
-
-            // check if the tile is empty
-            // use binary search
-            // int idx = tiles.BinarySearch(position);
-            // if (idx < 0)
-            // {
-            //     // tile is not in the list
-            //     return false;
-            // }
             
             // use linear search
             foreach (Hex tile in tiles)

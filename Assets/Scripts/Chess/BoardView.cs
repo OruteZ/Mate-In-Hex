@@ -143,5 +143,19 @@ namespace Chess
             // create board view
             CreateBoardView(board, animLastMove);
         }
+
+        public List<PieceView> GetPieceViews()
+        {
+            List<PieceView> pieceViews = new();
+            foreach (var piece in pieceList.Values)
+            {
+                if (piece.TryGetComponent(out PieceView pieceView))
+                {
+                    pieceViews.Add(pieceView);
+                }
+            }
+
+            return pieceViews;
+        }
     }
 }

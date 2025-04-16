@@ -13,6 +13,7 @@ namespace Chess
         public SpriteData spriteData;
         public float speed = 5f;
         
+        
         public void SetPiece(Piece newPiece)
         {
             piece = newPiece;

@@ -52,7 +52,7 @@ namespace Chess
             return $"{color} {pieceType} {from} -> {to} {flags}";
         }
         
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is Move move)
             {
@@ -64,6 +64,11 @@ namespace Chess
             }
             
             return false;
+        }
+
+        public override readonly int GetHashCode()
+        {
+            return (int)color * 100000 + (int)pieceType * 10000 + from.GetHashCode() * 100 + to.GetHashCode() + (int)flags;
         }
     }
 

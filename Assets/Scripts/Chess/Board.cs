@@ -155,6 +155,28 @@ namespace Chess
             moves.Remove(move);
         }
 
+        public bool TryAddPiece(Piece piece)
+        {
+            // check if the piece is already on the board
+            foreach (Piece p in pieces)
+            {
+                if (
+                       p.position == piece.position 
+                    && p.type == piece.type 
+                    && p.color == piece.color
+                    )
+                {
+                    return false;
+                }
+            }
+
+            // check if the tile is available
+            if (!IsTileAvailable(piece.position)) return false;
+
+            pieces.Add(piece);
+            return true;
+        }
+
         public Piece GetPieceAt(Hex position)
         {
             foreach (Piece piece in pieces)

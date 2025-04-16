@@ -35,7 +35,7 @@ namespace Chess
             }
         }
         
-        public void CreateBoardView([NotNull] Board board, bool showLastMove = false)
+        private void CreateBoardView([NotNull] Board board, bool showLastMove = false)
         {
             Move lastMove = Move.NONE;
             if (showLastMove && board.Moves.Count > 0)

@@ -35,17 +35,17 @@ public class BoardEditor : MonoBehaviour
         currentBoard = ScriptableObject.CreateInstance<Board>();
         currentBoard.InitBoard(puzzleInfo);
 
-        boardView.CreateBoardView(currentBoard, false);
-
-        var pieceViewList = boardView.GetPieceViews();
-        foreach(var view in pieceViewList) if(view is EditorPieceView v) {
-            v.onPieceMoved.AddListener(JudgeRightMove);
-        }
-
+        boardView.RefreshBoardView(currentBoard, false);
     }
 
-    private void JudgeRightMove(Piece piece, Hex from)
+    public void TryApplyMove(Piece piece, Hex from)
     {
+        if (currentBoard == null)
+        {
+            Debug.LogError("No current board to apply move to.");
+            piece.position = Hex.NONE;
+            return;
+        }
         if (currentBoard.IsTileAvailable(piece.position))
         {
             return;

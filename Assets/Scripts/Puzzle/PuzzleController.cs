@@ -34,7 +34,7 @@ namespace Puzzle
             board.InitBoard(puzzleInfo);
             
             // create board view
-            boardView.CreateBoardView(board);
+            boardView.RefreshBoardView(board);
         }
 
         private void Update() {

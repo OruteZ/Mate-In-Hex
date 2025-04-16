@@ -5,28 +5,39 @@ using Chess;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
+#if UNITY_EDITOR
+
 public class EditorPieceView : PieceView, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private Vector3 offset;
     private Camera mainCamera;
+    private BoardEditor editor;
 
-    /// <summary>
-    /// Piece moved / before hex
-    /// </summary>
-    /// <returns></returns>
-    public UnityEvent<Piece,Hex> onPieceMoved = new();
+    public UnityEvent onStartMoved = new UnityEvent();
     
     private void Awake()
     {
         mainCamera = Camera.main;
+
+        //오우 오우 쓰레기 코드
+        editor = FindObjectOfType<BoardEditor>();
+        if (editor == null)
+        {
+            Debug.LogError("EditorPieceView: BoardEditor not found in the scene.");
+            return;
+        }
     }
     
     // Begin dragging: calculate the pointer offset from the object
     public void OnBeginDrag(PointerEventData eventData)
     {
+        onStartMoved.Invoke(); // Notify that the piece has started moving
+
+
         Vector3 screenPos = new Vector3(eventData.position.x, eventData.position.y, mainCamera.WorldToScreenPoint(transform.position).z);
         Vector3 worldPoint = mainCamera.ScreenToWorldPoint(screenPos);
         offset = transform.position - worldPoint;
+
     }
     
     // Dragging: update the object position following the pointer
@@ -52,13 +63,21 @@ public class EditorPieceView : PieceView, IBeginDragHandler, IDragHandler, IEndD
         Hex newHex = Hex.GetHexFromPixel(transform.position);
         piece.position = newHex;
 
-        onPieceMoved.Invoke(piece, from); // Notify listeners about the piece movement
+        // 0. try apply move
+        editor.TryApplyMove(piece, from);
 
         // 1. if piece deleted : delete it
         if(piece.position == Hex.NONE)
         {
             Destroy(gameObject);
             return;
+        }
+
+        // 2. if crated piece (from == NONE) : add it to the board
+        if (from == Hex.NONE)
+        {
+            // Add the piece to the board
+            editor.currentBoard.TryAddPiece(piece);
         }
 
         
@@ -68,3 +87,5 @@ public class EditorPieceView : PieceView, IBeginDragHandler, IDragHandler, IEndD
         transform.position = targetPosition;
     }
 }
+
+#endif

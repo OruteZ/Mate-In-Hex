@@ -209,10 +209,10 @@ MonoBehaviour:
       q: 1
       r: 0
       s: -1
-  - color: 0
-    type: 4
+  - color: 1
+    type: 5
     position:
-      q: 1
+      q: 4
       r: 0
-      s: -1
+      s: -4
   solution: []

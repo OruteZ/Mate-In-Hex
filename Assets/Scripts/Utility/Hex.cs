@@ -1,16 +1,28 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable] 
 public struct Hex : IComparable<Hex>
 {
+    public Hex(int q, int r, int s)
+    {
+        this.q = q;
+        this.r = r;
+        this.s = s;
+        if (q + r + s != 0) 
+        {
+            throw new ArgumentException("q + r + s must be 0");
+        }
+    }
+    
+    public Hex(int q, int r) : this(q, r, -q - r) { }
     public readonly bool Equals(Hex other)
     {
         return q == other.q && r == other.r && s == other.s;
     }
 
-    public override bool Equals(object obj)
+    public override readonly bool Equals(object obj)
     {
         return obj is Hex other && Equals(other);
     }
@@ -29,16 +41,6 @@ public struct Hex : IComparable<Hex>
     public readonly int S => s;
 
     public static readonly Hex NONE = new (1000, 1000);
-    
-    public Hex(int q, int r, int s)
-    {
-        this.q = q;
-        this.r = r;
-        this.s = s;
-        if (q + r + s != 0) throw new ArgumentException("q + r + s must be 0");
-    }
-    
-    public Hex(int q, int r) : this(q, r, -q - r) { }
     
     public readonly Hex Add(Hex b)
     {
@@ -80,7 +82,7 @@ public struct Hex : IComparable<Hex>
     }
 
 
-    public int Distance(Hex b)
+    public readonly int Distance(Hex b)
     {
         return Subtract(b).Length();
     }
@@ -92,7 +94,7 @@ public struct Hex : IComparable<Hex>
         int c = Math.Abs(s);
         
         // 0이 포함되면 대각선 벡터가 아님
-        if(a == 0 || b == 0 || c == 0)
+        if(a == 0 || b == 0 || c == 0)  
             return false;
         
         int[] arr = new int[] { a, b, c };

@@ -80,7 +80,7 @@ public class BoardEditor : MonoBehaviour
             // Save the PuzzleInfo as an asset
             UnityEditor.AssetDatabase.CreateAsset(
                 saveInfo, 
-                "Assets/Scriptable Objects/Puzzles/" + puzzleNameInputField.text + ".asset"
+                "Assets/Resources/Puzzles/" + puzzleNameInputField.text + ".asset"
             );
             UnityEditor.AssetDatabase.SaveAssets();
             UnityEditor.AssetDatabase.Refresh();

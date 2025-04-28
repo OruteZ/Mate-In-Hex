@@ -106,6 +106,7 @@ namespace Chess
                         to = nextPos,
                         flags = MoveFlag.Capture
                     };
+                    moves.Add(captureMove);
                 }
             }
 
@@ -135,6 +136,7 @@ namespace Chess
                         to = nextPos,
                         flags = MoveFlag.Capture
                     };
+                    moves.Add(captureMove);
                 }
             }
 

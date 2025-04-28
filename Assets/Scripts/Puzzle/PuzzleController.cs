@@ -26,7 +26,7 @@ namespace Puzzle
             // check is puzzleInfo is null
             if (puzzleInfo == null)
             {
-                throw new System.NullReferenceException("puzzleInfo is null");
+                puzzleInfo = GameManager.Instance.CurSelectedPuzzleInfo;
             }
             
             // init board

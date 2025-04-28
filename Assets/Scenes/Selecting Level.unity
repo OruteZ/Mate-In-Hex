@@ -4997,7 +4997,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Content: {fileID: 885782043}
   m_Horizontal: 1
-  m_Vertical: 1
+  m_Vertical: 0
   m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
@@ -5750,8 +5750,8 @@ MonoBehaviour:
   stageBtnPrefab: {fileID: 9158528202602091035, guid: 6b0300f228294b74ba8c093d56dd8bb3, type: 3}
   stageBtnParent: {fileID: 885782043}
   puzzleInfos:
-  - {fileID: 11400000, guid: ed2c3eef8fc4441429b91dc9b602baf7, type: 2}
-  - {fileID: 11400000, guid: 203a05b99943be14e8d9c07629bc626d, type: 2}
+  - {fileID: 11400000, guid: 594c77666d6a3204cbe71050e32899df, type: 2}
+  - {fileID: 11400000, guid: 98d690fde3b3e09468eb22eefe722e3c, type: 2}
 --- !u!1 &1268899973
 GameObject:
   m_ObjectHideFlags: 0

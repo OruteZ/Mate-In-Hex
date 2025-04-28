@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77bdb87cac034205b1bba14228bf6eed, type: 3}
-  m_Name: Mate In 1_KOD
+  m_Name: 1-1
   m_EditorClassIdentifier: 
   tileList:
   - q: -4
@@ -197,34 +197,22 @@ MonoBehaviour:
     r: 0
     s: -4
   pieces:
-  - color: 0
-    type: 0
-    position:
-      q: 1000
-      r: 1000
-      s: -2000
-  - color: 0
-    type: 1
-    position:
-      q: 1000
-      r: 1000
-      s: -2000
   - color: 1
     type: 5
     position:
-      q: 4
+      q: 3
       r: 0
-      s: -4
+      s: -3
   - color: 0
     type: 5
     position:
-      q: 1
+      q: 0
       r: 1
-      s: -2
+      s: -1
   - color: 0
     type: 4
     position:
-      q: 0
-      r: -3
-      s: 3
+      q: 2
+      r: -4
+      s: 2
   solution: []

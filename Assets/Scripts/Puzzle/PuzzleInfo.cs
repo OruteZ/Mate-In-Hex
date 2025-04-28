@@ -26,5 +26,12 @@ namespace Puzzle
                 new(PieceColor.White, PieceType.Rook, new Hex(1, 0)),
             };
         }
+
+        [ContextMenu("Remove null hex")]
+        public void RemoveNullHex()
+        {
+            tileList.RemoveAll(hex => hex == Hex.NONE);
+            pieces.RemoveAll(piece => piece.position == Hex.NONE);
+        }
     }
 }

@@ -31,7 +31,7 @@ public class BoardEditor : MonoBehaviour
         LoadInfo(currentEditing);
     }
 
-    private void LoadInfo(PuzzleInfo puzzleInfo) {
+    public  void LoadInfo(PuzzleInfo puzzleInfo) {
         currentBoard = ScriptableObject.CreateInstance<Board>();
         currentBoard.InitBoard(puzzleInfo);
 
@@ -76,6 +76,7 @@ public class BoardEditor : MonoBehaviour
             PuzzleInfo saveInfo = ScriptableObject.CreateInstance<PuzzleInfo>();
             saveInfo.tileList = currentBoard.Tiles;
             saveInfo.pieces = currentBoard.Pieces.ToList();
+            saveInfo.RemoveNullHex();
 
             // Save the PuzzleInfo as an asset
             UnityEditor.AssetDatabase.CreateAsset(

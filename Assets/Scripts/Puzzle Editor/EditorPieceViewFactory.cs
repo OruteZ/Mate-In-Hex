@@ -49,7 +49,7 @@ public class EditorPieceViewFactory : MonoBehaviour
         pieceView.onStartMoved.RemoveAllListeners();
 
         var piece = pieceView.piece;
-        var newObj = CreatePieceView(piece);
+        var newObj = CreatePieceView(piece.Clone());
 
         newObj.transform.position = pieceView.transform.position;
         newObj.transform.localScale = pieceView.transform.localScale;

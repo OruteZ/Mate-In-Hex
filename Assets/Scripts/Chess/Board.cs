@@ -50,6 +50,8 @@ namespace Chess
         public bool IsCheckmate(PieceColor attackColor)
         {
             if(!IsCheck(attackColor)) return false;
+            // if last move has flag return true
+            if(moves.Count > 0 && moves.Last().HasFlag(MoveFlag.Checkmate)) return true;
 
             // check opponent's movable count
             // opponent의 모든 piece에 대해

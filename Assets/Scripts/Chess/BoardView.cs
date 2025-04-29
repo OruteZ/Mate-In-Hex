@@ -11,6 +11,7 @@ namespace Chess
     {
         public GameObject tilePrefab;
         public GameObject piecePrefab;
+        public GameObject mateEffect;
         
         private readonly Dictionary<Hex, GameObject> pieceList = new ();
 
@@ -119,11 +120,15 @@ namespace Chess
                         }
                     }
 
+                    if (board.IsCheckmate(lastMove.color))
+                    {
+                        Vector2 pos = lastMove.to.ToPixel();
+                        Instantiate(mateEffect, pos, Quaternion.identity);
+                    }
+
                     // 4. set the piece position in the pieceList
                     pieceList.Remove(lastMove.from);
                     pieceList.Add(lastMove.to, go);
-
-                    
                 });
             }
             else

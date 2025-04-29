@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chess;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace Puzzle
 {
@@ -14,6 +16,7 @@ namespace Puzzle
         [Header("References")]
         [SerializeField] private BoardView boardView;
         [SerializeField] private Board board;
+        [SerializeField] private Transform finishCanvas;
 
         [Header("About Moves")]
         [SerializeField] private MovableView movableView;
@@ -56,7 +59,6 @@ namespace Puzzle
                         else Debug.Log("Clicked on empty tile or no piece found.");
                     }
                     break;
-
                 case ControlState.SelectPiece:
                     if(Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.S)) 
                     {
@@ -78,6 +80,14 @@ namespace Puzzle
                                     // apply the move
                                     board.ApplyMove(move);
                                     
+                                    if(board.IsCheckmate(move.color)) 
+                                    {
+                                        Debug.Log($"{move.color} is checkmate after move {move}");
+
+                                        board.Moves.Last().SetFlag(MoveFlag.Checkmate);
+                                        Invoke(nameof(ShowFinishCanvas), 1);
+                                    }
+                                    
                                     // refresh the board view
                                     boardView.RefreshBoardView(board, true); 
                                     
@@ -93,11 +103,7 @@ namespace Puzzle
                                     }
 
 
-                                    // debug : show check
-                                    if(board.IsCheckmate(move.color)) 
-                                    {
-                                        Debug.Log($"{move.color} is checkmate after move {move}");
-                                    }
+                                    
 
                                     break;
                                 }
@@ -106,7 +112,14 @@ namespace Puzzle
                         else Debug.Log($"Clicked on empty tile {clickedPos}");
                     }
                     break;
+                case ControlState.ReadyToFinish:
+                    // press any button to move scene "Selecting Level"
+                    if (Input.anyKeyDown)
+                    {
+                        SceneManager.LoadScene("Selecting Level");
+                    }
 
+                    break;
                 default:
                     break;
             }
@@ -127,7 +140,7 @@ namespace Puzzle
             RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.zero, Mathf.Infinity, layerMask);
             if (hit.collider != null)
             {
-                if (hit.collider.TryGetComponent<PieceView>(out var pieceView))
+                if (hit.collider.TryGetComponent(out PieceView pieceView))
                 {
                     return pieceView.piece;
                 }
@@ -156,6 +169,32 @@ namespace Puzzle
 
             movableView.ShowMovable(curMovable.ConvertAll(move => move.to));
         }
+        
+        private void ShowFinishCanvas()
+        {
+            // Ensure the finishCanvas is active
+            finishCanvas.gameObject.SetActive(true);
+
+            // Get or add a CanvasGroup component
+            CanvasGroup canvasGroup = finishCanvas.GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = finishCanvas.gameObject.AddComponent<CanvasGroup>();
+            }
+
+            // Set initial alpha to 0
+            canvasGroup.alpha = 0;
+
+            // Animate the alpha to 1
+            LeanTween.alphaCanvas(canvasGroup, 1f, 0.5f)
+                .setEase(LeanTweenType.easeOutQuad)
+                .setOnComplete(() =>
+                {
+                    Debug.Log("Finish canvas fade-in animation completed.");
+                    // Additional actions after animation (if needed)
+                    controlState = ControlState.ReadyToFinish;
+                });
+        }
     }
 
     [System.Serializable]
@@ -164,5 +203,6 @@ namespace Puzzle
         Ready,
         SelectPiece,
         NotControllable,
+        ReadyToFinish
     }
 }

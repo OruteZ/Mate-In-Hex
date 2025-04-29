@@ -16,10 +16,7 @@ public class GameManager : Singleton<GameManager>
     public bool IsPause
     {
         get => Time.timeScale == 0;
-        set
-        {
-            Time.timeScale = value ? 0 : 1;
-        }
+        set => Time.timeScale = value ? 0 : 1;
     }
 
     protected override void Awake()

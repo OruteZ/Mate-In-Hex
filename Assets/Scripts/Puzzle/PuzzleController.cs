@@ -16,7 +16,8 @@ namespace Puzzle
         [Header("References")]
         [SerializeField] private BoardView boardView;
         [SerializeField] private Board board;
-        [SerializeField] private Transform finishCanvas;
+        [SerializeField] private Transform mateSuccessCanvas;
+        [SerializeField] private Transform mateFailCanvas;
 
         [Header("About Moves")]
         [SerializeField] private MovableView movableView;
@@ -27,10 +28,7 @@ namespace Puzzle
         private void Start()
         {
             // check is puzzleInfo is null
-            if (puzzleInfo == null)
-            {
-                puzzleInfo = GameManager.Instance.CurSelectedPuzzleInfo;
-            }
+            puzzleInfo = GameManager.Instance.CurSelectedPuzzleInfo;
             
             // init board
             board = ScriptableObject.CreateInstance<Board>();
@@ -51,12 +49,19 @@ namespace Puzzle
                     if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.A))
                     {
                         Piece clickedPiece = GetClickedPiece();
-                        if (clickedPiece != null)
+                        if (clickedPiece == null) 
                         {
-                            SelectPiece(clickedPiece);
-                            controlState = ControlState.SelectPiece;
+                            Debug.Log("Clicked on empty tile");
+                            return;
                         }
-                        else Debug.Log("Clicked on empty tile or no piece found.");
+                        if (clickedPiece.color is not PieceColor.White && turnBased) 
+                        {
+                            Debug.Log($"Clicked on {clickedPiece.color} piece, but it's player's turn.");
+                            return;
+                        }
+
+                        SelectPiece(clickedPiece);
+                        controlState = ControlState.SelectPiece;
                     }
                     break;
                 case ControlState.SelectPiece:
@@ -85,6 +90,8 @@ namespace Puzzle
                                         Debug.Log($"{move.color} is checkmate after move {move}");
 
                                         board.Moves.Last().SetFlag(MoveFlag.Checkmate);
+
+                                        // mate일 경우 BoardView에서 이펙트가 1초동안 발생하기 때문에 1초 딜레이
                                         Invoke(nameof(ShowFinishCanvas), 1);
                                     }
                                     
@@ -93,6 +100,8 @@ namespace Puzzle
                                     
                                     // hide movable range
                                     movableView.HideMovable();
+
+                                    if(controlState is ControlState.ReadyToFinish) break;
                                     
                                     // reset control state
                                     controlState = ControlState.Ready;
@@ -100,6 +109,10 @@ namespace Puzzle
                                     {
                                         // wait for player to click again
                                         controlState = ControlState.NotControllable;
+
+                                        if(board.Moves.Last().HasFlag(MoveFlag.Checkmate) is false){
+                                            Invoke(nameof(SetAiMovable), 0.5f); // delay AI move for 0.5 seconds
+                                        }
                                     }
 
 
@@ -119,6 +132,33 @@ namespace Puzzle
                         SceneManager.LoadScene("Selecting Level");
                     }
 
+                    break;
+                case ControlState.AIControl:
+                    // AI move
+                    Move aiMove = AIController.GetAnyMove(board, PieceColor.Black);
+                    if (aiMove.IsNoneValue() is false) 
+                    {
+                        board.ApplyMove(aiMove);
+                        boardView.RefreshBoardView(board, true); 
+
+                        int moveLimit = puzzleInfo.GetMoveLimit();
+                        int whiteMoves = board.Moves.Count(m => m.color == PieceColor.White);
+
+                        // fail
+                        if (whiteMoves >= moveLimit) 
+                        {
+                            // show fail canvas
+                            mateFailCanvas.gameObject.SetActive(true);
+                            controlState = ControlState.ReadyToFinish;
+
+                            Debug.Log("Fail: AI has no moves left.");
+                            return;
+                        }
+                        
+                        // reset control state
+                        else controlState = ControlState.Ready;
+                    }
+                    else Debug.Log("AI has no moves left.");
                     break;
                 default:
                     break;
@@ -173,13 +213,13 @@ namespace Puzzle
         private void ShowFinishCanvas()
         {
             // Ensure the finishCanvas is active
-            finishCanvas.gameObject.SetActive(true);
+            mateSuccessCanvas.gameObject.SetActive(true);
 
             // Get or add a CanvasGroup component
-            CanvasGroup canvasGroup = finishCanvas.GetComponent<CanvasGroup>();
+            CanvasGroup canvasGroup = mateSuccessCanvas.GetComponent<CanvasGroup>();
             if (canvasGroup == null)
             {
-                canvasGroup = finishCanvas.gameObject.AddComponent<CanvasGroup>();
+                canvasGroup = mateSuccessCanvas.gameObject.AddComponent<CanvasGroup>();
             }
 
             // Set initial alpha to 0
@@ -195,6 +235,12 @@ namespace Puzzle
                     controlState = ControlState.ReadyToFinish;
                 });
         }
+
+        
+
+                                        void SetAiMovable() {
+                                            controlState = ControlState.AIControl;
+                                        }
     }
 
     [System.Serializable]
@@ -203,6 +249,7 @@ namespace Puzzle
         Ready,
         SelectPiece,
         NotControllable,
-        ReadyToFinish
+        ReadyToFinish,
+        AIControl
     }
 }

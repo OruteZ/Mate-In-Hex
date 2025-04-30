@@ -33,5 +33,10 @@ namespace Puzzle
             tileList.RemoveAll(hex => hex == Hex.NONE);
             pieces.RemoveAll(piece => piece.position == Hex.NONE);
         }
+
+        public int GetMoveLimit() {
+            // return white moves cnt
+            return solution.Count(mov => mov.color == PieceColor.White);
+        }
     }
 }

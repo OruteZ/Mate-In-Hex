@@ -215,4 +215,5 @@ MonoBehaviour:
       q: 2
       r: -4
       s: 2
+  showPieceType: 4
   solution: []

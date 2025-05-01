@@ -233,4 +233,5 @@ MonoBehaviour:
       q: 4
       r: -4
       s: 0
+  showPieceType: 3
   solution: []

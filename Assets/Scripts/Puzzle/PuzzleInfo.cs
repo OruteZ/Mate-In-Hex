@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chess;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Puzzle
         [Header("Puzzle Info")]
         public List<Hex> tileList;
         public List<Piece> pieces;
+        public PieceType showPieceType = PieceType.Pawn;
 
         [Header("Solution")]
         [Tooltip("List of moves to solve the puzzle.")]
@@ -36,7 +38,7 @@ namespace Puzzle
 
         public int GetMoveLimit() {
             // return white moves cnt
-            return solution.Count(mov => mov.color == PieceColor.White);
+            return Mathf.Clamp(solution.Count(mov => mov.color == PieceColor.White), 1, 10000);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Chess;
 using Puzzle;
 using TMPro;
 using UnityEngine;
@@ -57,7 +58,7 @@ public class StageViewer : MonoBehaviour
     {  
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("Main Menu");
         }
 
 
@@ -70,7 +71,7 @@ public class StageViewer : MonoBehaviour
             {
                 Debug.Log("Clicked on tile: " + h + " with puzzle info: " + puzzleInfo.name);
                 selected = puzzleInfo;
-                stageNameText.text = puzzleInfo.name;
+                stageNameText.text =  $"Stage {puzzleInfo.name} : Mate in {puzzleInfo.GetMoveLimit()}";
 
                 // 해당 타일이 중앙에 오도록 camera leanTween
                 Vector3 targetPosition = h.ToPixel() * tileDistance;
@@ -107,6 +108,10 @@ public class StageViewer : MonoBehaviour
             var hover = tile.AddComponent<HoverScale>();
             hover.scaleFactor = hoverScale;
             hover.duration = hoverDuration;
+
+            SpriteRenderer pieceSprite = tile.transform.GetChild(0).GetComponent<SpriteRenderer>();
+            Piece samplePiece = new(PieceColor.Black, info.showPieceType, hex);
+            pieceSprite.sprite = GameManager.Instance.PieceSpriteData.GetSprite(samplePiece);
 
             if (tile.TryGetComponent(out SpriteRenderer tileSpriteRenderer))
             {

@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curSelectedPuzzleInfo: {fileID: 0}
+  pieceSpriteData: {fileID: 11400000, guid: 04ab70e201219a4478420de68ddb9266, type: 2}

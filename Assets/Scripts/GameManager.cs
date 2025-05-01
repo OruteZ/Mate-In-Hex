@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private PuzzleInfo curSelectedPuzzleInfo;
+    [SerializeField] private SpriteData pieceSpriteData;
 
     public PuzzleInfo CurSelectedPuzzleInfo
     {
@@ -17,6 +18,12 @@ public class GameManager : Singleton<GameManager>
     {
         get => Time.timeScale == 0;
         set => Time.timeScale = value ? 0 : 1;
+    }
+
+    public SpriteData PieceSpriteData
+    {
+        get => pieceSpriteData;
+        private set => pieceSpriteData = value;
     }
 
     protected override void Awake()

@@ -115,9 +115,6 @@ namespace Puzzle
                                         }
                                     }
 
-
-                                    
-
                                     break;
                                 }
                             }
@@ -159,6 +156,7 @@ namespace Puzzle
                         else controlState = ControlState.Ready;
                     }
                     else Debug.Log("AI has no moves left.");
+
                     break;
                 default:
                     break;
@@ -238,9 +236,9 @@ namespace Puzzle
 
         
 
-                                        void SetAiMovable() {
-                                            controlState = ControlState.AIControl;
-                                        }
+        void SetAiMovable() {
+            controlState = ControlState.AIControl;
+        }
     }
 
     [System.Serializable]

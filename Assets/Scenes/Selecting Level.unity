@@ -777,7 +777,7 @@ MonoBehaviour:
   hoverDuration: 0.5
   backGround: {fileID: 0}
   tiles: []
-  tilePrefab: {fileID: 7421485777504260053, guid: cbb7dfdffdb25954ca408b9a12df0b58, type: 3}
+  tilePrefab: {fileID: 7421485777504260053, guid: 0fd4f83eaf3b75f4eb63a8f030327155, type: 3}
   tileParent: {fileID: 493911579}
   puzzleInfos:
   - {fileID: 11400000, guid: 594c77666d6a3204cbe71050e32899df, type: 2}
